@@ -1,0 +1,2060 @@
+:root {
+  --paper: #f4f0e8;
+  --ink: #111111;
+  --soft-ink: rgba(17, 17, 17, 0.55);
+  --light-ink: rgba(17, 17, 17, 0.34);
+  --line: rgba(17, 17, 17, 0.15);
+  --card: rgba(255, 255, 255, 0.48);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--paper);
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+
+  overflow-x: hidden;
+
+  background: var(--paper);
+  color: var(--ink);
+
+  font-family:
+    "DM Sans",
+    Arial,
+    sans-serif;
+
+  opacity: 1;
+
+  transition:
+    opacity 420ms ease;
+}
+
+body.is-leaving {
+  opacity: 0;
+}
+
+a,
+button {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.page-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  z-index: 50;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding:
+    26px
+    clamp(22px, 3.4vw, 56px);
+
+  pointer-events: none;
+}
+
+.header-name,
+.header-right {
+  pointer-events: auto;
+}
+
+.header-name {
+  color: var(--ink);
+
+  font-size:
+    clamp(13px, 1vw, 16px);
+
+  font-weight: 500;
+
+  letter-spacing: 0.07em;
+  text-decoration: none;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.header-section {
+  color: var(--soft-ink);
+
+  font-size: 10px;
+
+  letter-spacing: 0.15em;
+}
+
+.back-link {
+  position: relative;
+
+  color: rgba(17, 17, 17, 0.72);
+
+  font-size: 10px;
+
+  letter-spacing: 0.15em;
+  text-decoration: none;
+}
+
+.back-link::after {
+  position: absolute;
+  right: 0;
+  bottom: -5px;
+  left: 0;
+
+  height: 1px;
+
+  background: currentColor;
+
+  content: "";
+
+  transform: scaleX(0);
+  transform-origin: right center;
+
+  transition:
+    transform 320ms ease;
+}
+
+.back-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+.background-year {
+  position: fixed;
+  z-index: 0;
+
+  margin: 0;
+
+  color: rgba(17, 17, 17, 0.042);
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(150px, 20vw, 340px);
+
+  font-weight: 400;
+
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.background-year--top {
+  top: 10vh;
+  left: 1vw;
+}
+
+.background-year--bottom {
+  right: 2vw;
+  bottom: 4vh;
+}
+
+.page-main {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 1540px;
+  margin: 0 auto;
+
+  padding:
+    clamp(145px, 18vh, 210px)
+    clamp(22px, 5vw, 84px)
+    180px;
+}
+
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.js .reveal {
+  opacity: 0;
+
+  transform:
+    translateY(34px);
+
+  transition:
+    opacity 850ms ease,
+    transform 1000ms
+      cubic-bezier(
+        0.22,
+        0.72,
+        0.18,
+        1
+      );
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 项目首页 */
+
+.project-hero {
+  display: grid;
+
+  grid-template-columns:
+    minmax(330px, 0.8fr)
+    minmax(560px, 1.2fr);
+
+  gap:
+    clamp(55px, 8vw, 130px);
+
+  align-items: center;
+
+  min-height:
+    calc(100vh - 180px);
+
+  margin-bottom:
+    clamp(190px, 29vh, 330px);
+}
+
+.hero-copy {
+  max-width: 530px;
+}
+
+.section-number {
+  margin: 0 0 21px;
+
+  color: var(--light-ink);
+
+  font-size: 10px;
+
+  letter-spacing: 0.15em;
+}
+
+.hero-title {
+  margin: 0;
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(62px, 7.2vw, 112px);
+
+  font-weight: 400;
+
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+}
+
+.hero-subtitle {
+  max-width: 430px;
+  margin: 28px 0 0;
+
+  font-size:
+    clamp(16px, 1.45vw, 22px);
+
+  line-height: 1.4;
+}
+
+.hero-description {
+  max-width: 510px;
+  margin: 27px 0 0;
+
+  color: var(--soft-ink);
+
+  font-size:
+    clamp(12px, 0.95vw, 15px);
+
+  line-height: 1.75;
+}
+
+.project-meta {
+  display: grid;
+  gap: 12px;
+
+  margin-top: 38px;
+}
+
+.meta-row {
+  display: grid;
+
+  grid-template-columns:
+    72px
+    minmax(0, 1fr);
+
+  gap: 17px;
+
+  align-items: start;
+}
+
+.meta-label {
+  color: var(--light-ink);
+
+  font-size: 9px;
+
+  letter-spacing: 0.13em;
+}
+
+.meta-value {
+  color: rgba(17, 17, 17, 0.68);
+
+  font-size: 11px;
+
+  line-height: 1.55;
+}
+
+.hero-gallery {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    clamp(10px, 1.4vw, 23px);
+
+  align-items: start;
+}
+
+.hero-phone {
+  min-width: 0;
+  margin: 0;
+}
+
+.hero-phone--left {
+  margin-top: 58px;
+}
+
+.hero-phone--center {
+  margin-top: 0;
+}
+
+.hero-phone--right {
+  margin-top: 31px;
+}
+
+.hero-phone figcaption,
+.single-phone-card figcaption {
+  margin-top: 10px;
+
+  color: var(--soft-ink);
+
+  font-size: 10px;
+
+  letter-spacing: 0.045em;
+
+  text-align: center;
+}
+
+.image-button {
+  display: block;
+
+  width: 100%;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(17, 17, 17, 0.11);
+
+  border-radius:
+    clamp(12px, 1.4vw, 24px);
+
+  background:
+    rgba(255, 255, 255, 0.5);
+
+  cursor: zoom-in;
+
+  transition:
+    transform 500ms ease,
+    box-shadow 500ms ease;
+}
+
+.image-button:hover {
+  transform:
+    translateY(-4px);
+
+  box-shadow:
+    0 18px 42px
+    rgba(17, 17, 17, 0.075);
+}
+
+.image-button img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  background: white;
+}
+
+/* 通用章节 */
+
+.project-section {
+  margin-bottom:
+    clamp(190px, 28vh, 325px);
+}
+
+.section-heading {
+  display: grid;
+
+  grid-template-columns:
+    56px
+    minmax(0, 1fr);
+
+  gap: 22px;
+
+  max-width: 780px;
+
+  margin-bottom:
+    clamp(45px, 7vh, 82px);
+}
+
+.section-heading .section-number {
+  padding-top: 8px;
+}
+
+.section-title {
+  margin: 0;
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(35px, 4.3vw, 68px);
+
+  font-weight: 400;
+
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+}
+
+.section-description {
+  max-width: 650px;
+  margin: 20px 0 0;
+
+  color: var(--soft-ink);
+
+  font-size:
+    clamp(12px, 1vw, 15px);
+
+  line-height: 1.72;
+}
+
+/* 双模式和身份页面 */
+
+.dual-mode-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    clamp(45px, 8vw, 130px);
+
+  align-items: start;
+
+  width:
+    min(880px, 78vw);
+
+  margin: 0 auto;
+}
+
+.large-phone-card {
+  min-width: 0;
+  margin: 0;
+}
+
+.large-phone-card--lower {
+  margin-top: 95px;
+}
+
+.detailed-caption {
+  display: grid;
+  gap: 8px;
+
+  margin-top: 16px;
+
+  text-align: center;
+}
+
+.caption-title {
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(20px, 1.9vw, 29px);
+}
+
+.caption-text {
+  color: var(--soft-ink);
+
+  font-size: 11px;
+
+  line-height: 1.65;
+}
+
+/* 时间规划 */
+
+.planning-section {
+  display: grid;
+
+  grid-template-columns:
+    minmax(270px, 420px)
+    minmax(340px, 530px);
+
+  gap:
+    clamp(68px, 11vw, 175px);
+
+  align-items: center;
+
+  width:
+    min(1040px, 88vw);
+
+  margin:
+    0 auto
+    clamp(190px, 28vh, 325px);
+}
+
+.planning-image {
+  width:
+    min(340px, 100%);
+
+  margin: 0 auto;
+}
+
+.single-phone-card {
+  margin: 0;
+}
+
+.planning-copy .section-number {
+  margin-bottom: 18px;
+}
+
+.planning-copy .section-description {
+  margin-bottom: 38px;
+}
+
+.planning-feature {
+  display: grid;
+
+  grid-template-columns:
+    34px
+    minmax(0, 1fr);
+
+  gap: 17px;
+
+  padding:
+    20px
+    0;
+
+  border-top:
+    1px solid
+    var(--line);
+}
+
+.planning-feature:last-child {
+  border-bottom:
+    1px solid
+    var(--line);
+}
+
+.planning-feature-number {
+  padding-top: 4px;
+
+  color: var(--light-ink);
+
+  font-size: 9px;
+
+  letter-spacing: 0.12em;
+}
+
+.planning-feature h3 {
+  margin: 0;
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(21px, 2vw, 29px);
+
+  font-weight: 400;
+}
+
+.planning-feature p {
+  margin: 8px 0 0;
+
+  color: var(--soft-ink);
+
+  font-size: 12px;
+
+  line-height: 1.65;
+}
+
+/* 支持功能 */
+
+.support-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    clamp(22px, 4vw, 62px);
+
+  align-items: start;
+
+  width: 100%;
+}
+
+.support-card {
+  min-width: 0;
+  margin: 0;
+}
+
+.support-card--lower {
+  margin-top: 86px;
+}
+
+/* PDF */
+
+.document-section {
+  margin:
+    clamp(190px, 28vh, 325px)
+    0;
+}
+
+.document-card {
+  display: grid;
+
+  grid-template-columns:
+    90px
+    minmax(0, 1fr)
+    auto;
+
+  gap:
+    clamp(25px, 4vw, 64px);
+
+  align-items: center;
+
+  padding:
+    clamp(28px, 4vw, 60px);
+
+  border:
+    1px solid
+    var(--line);
+
+  background:
+    rgba(255, 255, 255, 0.4);
+
+  color: inherit;
+  text-decoration: none;
+
+  transition:
+    background-color 420ms ease,
+    transform 420ms ease;
+}
+
+.document-card:hover {
+  background:
+    rgba(255, 255, 255, 0.73);
+
+  transform:
+    translateY(-4px);
+}
+
+.document-icon {
+  display: grid;
+  place-items: center;
+
+  width: 72px;
+  height: 88px;
+
+  border:
+    1px solid
+    rgba(17, 17, 17, 0.24);
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size: 21px;
+}
+
+.document-label {
+  margin: 0 0 11px;
+
+  color: var(--light-ink);
+
+  font-size: 9px;
+
+  letter-spacing: 0.14em;
+}
+
+.document-title {
+  margin: 0;
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(26px, 3vw, 45px);
+
+  font-weight: 400;
+}
+
+.document-description {
+  max-width: 680px;
+  margin: 14px 0 0;
+
+  color: var(--soft-ink);
+
+  font-size: 12px;
+
+  line-height: 1.72;
+}
+
+.document-action {
+  display: grid;
+  gap: 8px;
+
+  justify-items: end;
+}
+
+.document-action span {
+  font-size: 12px;
+
+  letter-spacing: 0.12em;
+}
+
+.document-action small {
+  color: var(--light-ink);
+
+  font-size: 9px;
+
+  letter-spacing: 0.1em;
+}
+
+/* 视频区 */
+
+.video-section {
+  margin-top:
+    clamp(190px, 29vh, 340px);
+}
+
+.video-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    clamp(60px, 8vw, 125px)
+    clamp(30px, 5vw, 78px);
+}
+
+.video-card {
+  min-width: 0;
+}
+
+.video-card--lower {
+  margin-top: 95px;
+}
+
+.video-placeholder {
+  position: relative;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  aspect-ratio: 16 / 9;
+
+  padding:
+    clamp(19px, 2vw, 30px);
+
+  border:
+    1px solid
+    var(--line);
+
+  background:
+    rgba(255, 255, 255, 0.34);
+
+  overflow: hidden;
+}
+
+.video-number,
+.video-state {
+  position: relative;
+  z-index: 2;
+
+  color: var(--soft-ink);
+
+  font-size: 9px;
+
+  letter-spacing: 0.12em;
+}
+
+.play-symbol {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  display: grid;
+  place-items: center;
+
+  width: 57px;
+  height: 57px;
+
+  border:
+    1px solid
+    rgba(17, 17, 17, 0.22);
+
+  border-radius: 50%;
+
+  color:
+    rgba(17, 17, 17, 0.46);
+
+  font-size: 12px;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+.video-copy {
+  margin-top: 16px;
+}
+
+.video-copy h3 {
+  margin: 0;
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(22px, 2.2vw, 33px);
+
+  font-weight: 400;
+}
+
+.video-copy p {
+  margin: 8px 0 0;
+
+  color: var(--soft-ink);
+
+  font-size: 10px;
+
+  letter-spacing: 0.07em;
+}
+
+.back-to-top {
+  display: block;
+
+  width: fit-content;
+
+  margin:
+    220px
+    auto
+    0;
+
+  color: var(--soft-ink);
+
+  font-size: 9px;
+
+  letter-spacing: 0.14em;
+  text-decoration: none;
+}
+
+/* 图片放大 */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+
+  z-index: 1000;
+
+  display: grid;
+  place-items: center;
+
+  padding: 34px;
+
+  background:
+    rgba(244, 240, 232, 0.98);
+
+  opacity: 0;
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition:
+    opacity 350ms ease,
+    visibility 350ms ease;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+.lightbox-content {
+  display: grid;
+  justify-items: center;
+  gap: 13px;
+
+  width: 100%;
+  height: 100%;
+}
+
+.lightbox-image {
+  display: block;
+
+  max-width: 92vw;
+  max-height:
+    calc(100vh - 100px);
+
+  object-fit: contain;
+
+  opacity: 0;
+
+  transform:
+    scale(0.985);
+
+  transition:
+    opacity 400ms ease,
+    transform 450ms ease;
+}
+
+.lightbox.is-open
+.lightbox-image {
+  opacity: 1;
+
+  transform:
+    scale(1);
+}
+
+.lightbox-caption {
+  margin: 0;
+
+  color: var(--soft-ink);
+
+  font-size: 11px;
+
+  text-align: center;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 23px;
+  right: 28px;
+
+  width: 42px;
+  height: 42px;
+
+  color:
+    rgba(17, 17, 17, 0.7);
+
+  font-size: 27px;
+
+  cursor: pointer;
+
+  transition:
+    transform 280ms ease;
+}
+
+.lightbox-close:hover {
+  transform:
+    rotate(90deg);
+}
+
+body.is-lightbox-open {
+  overflow: hidden;
+}
+
+/* 平板 */
+
+@media (max-width: 1080px) {
+  .project-hero {
+    grid-template-columns:
+      minmax(280px, 0.75fr)
+      minmax(470px, 1.25fr);
+
+    gap: 45px;
+  }
+
+  .support-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 75px 38px;
+  }
+
+  .support-card--lower {
+    margin-top: 0;
+  }
+
+  .support-card:nth-child(even) {
+    margin-top: 68px;
+  }
+}
+
+/* 手机 */
+
+@media (max-width: 760px) {
+  .page-header {
+    padding:
+      21px
+      18px;
+  }
+
+  .header-section {
+    display: none;
+  }
+
+  .background-year {
+    font-size:
+      clamp(105px, 32vw, 170px);
+  }
+
+  .page-main {
+    padding:
+      130px
+      18px
+      150px;
+  }
+
+  .project-hero {
+    grid-template-columns: 1fr;
+
+    min-height: 0;
+
+    margin-bottom: 170px;
+  }
+
+  .hero-copy {
+    max-width: none;
+  }
+
+  .hero-title {
+    font-size:
+      clamp(58px, 18vw, 89px);
+  }
+
+  .hero-gallery {
+    gap: 8px;
+  }
+
+  .hero-phone--left {
+    margin-top: 31px;
+  }
+
+  .hero-phone--right {
+    margin-top: 18px;
+  }
+
+  .hero-phone figcaption {
+    font-size: 8px;
+  }
+
+  .section-heading {
+    grid-template-columns: 1fr;
+
+    gap: 5px;
+  }
+
+  .section-heading
+  .section-number {
+    padding-top: 0;
+  }
+
+  .dual-mode-grid {
+    width: 100%;
+
+    gap: 24px;
+  }
+
+  .large-phone-card--lower {
+    margin-top: 46px;
+  }
+
+  .planning-section {
+    grid-template-columns: 1fr;
+
+    width: 100%;
+
+    gap: 65px;
+  }
+
+  .planning-image {
+    width:
+      min(300px, 80vw);
+  }
+
+  .support-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 52px 15px;
+  }
+
+  .support-card:nth-child(even) {
+    margin-top: 42px;
+  }
+
+  .document-card {
+    grid-template-columns: 1fr;
+  }
+
+  .document-icon {
+    width: 58px;
+    height: 70px;
+  }
+
+  .document-action {
+    justify-items: start;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .video-card--lower {
+    margin-top: 0;
+  }
+}
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+  body,
+  .reveal,
+  .image-button,
+  .lightbox,
+  .lightbox-image {
+    transition-duration: 1ms;
+  }
+}
+/* =========================
+   PDF FLIPBOOK
+   ========================= */
+
+[hidden] {
+  display: none !important;
+}
+
+.pdf-showcase {
+  margin-bottom:
+    clamp(
+      190px,
+      28vh,
+      330px
+    );
+}
+
+.pdf-heading {
+  display: grid;
+
+  grid-template-columns:
+    56px
+    minmax(0, 1fr);
+
+  gap: 22px;
+
+  max-width: 860px;
+
+  margin-bottom:
+    clamp(
+      45px,
+      7vh,
+      82px
+    );
+}
+
+.pdf-heading .section-number {
+  padding-top: 7px;
+}
+
+.pdf-label {
+  margin: 0 0 13px;
+
+  color:
+    var(--light-ink);
+
+  font-size: 9px;
+
+  letter-spacing: 0.15em;
+}
+
+.pdf-title {
+  margin: 0;
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(
+      40px,
+      5vw,
+      78px
+    );
+
+  font-weight: 400;
+
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+
+.pdf-description {
+  max-width: 680px;
+
+  margin: 22px 0 0;
+
+  color:
+    var(--soft-ink);
+
+  font-size:
+    clamp(
+      12px,
+      1vw,
+      15px
+    );
+
+  line-height: 1.75;
+}
+
+.flipbook-shell {
+  display: grid;
+
+  grid-template-columns:
+    48px
+    minmax(0, 1fr)
+    48px;
+
+  gap:
+    clamp(
+      12px,
+      2vw,
+      30px
+    );
+
+  align-items: center;
+
+  width:
+    min(
+      1180px,
+      92vw
+    );
+
+  margin: 0 auto;
+}
+
+.pdf-flipbook {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  width: 100%;
+
+  aspect-ratio: 1.414 / 1;
+
+  outline: none;
+
+  perspective: 1800px;
+}
+
+.pdf-flipbook.is-single-page {
+  grid-template-columns: 1fr;
+
+  width:
+    min(
+      560px,
+      82vw
+    );
+
+  margin: 0 auto;
+
+  aspect-ratio: 0.707 / 1;
+}
+
+.pdf-flipbook.is-single-page
+.pdf-page--right {
+  display: none;
+}
+
+.pdf-page {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  background: white;
+
+  box-shadow:
+    0 16px 45px
+    rgba(17, 17, 17, 0.09);
+
+  transform-style:
+    preserve-3d;
+}
+
+.pdf-page--left {
+  border-right:
+    1px solid
+    rgba(17, 17, 17, 0.12);
+
+  transform-origin:
+    right center;
+}
+
+.pdf-page--right {
+  border-left:
+    1px solid
+    rgba(17, 17, 17, 0.07);
+
+  transform-origin:
+    left center;
+}
+
+.pdf-page.is-blank {
+  background:
+    rgba(255, 255, 255, 0.32);
+
+  box-shadow: none;
+}
+
+.pdf-page canvas {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.pdf-page-number {
+  position: absolute;
+
+  right: 13px;
+  bottom: 10px;
+
+  color:
+    rgba(17, 17, 17, 0.34);
+
+  font-size: 9px;
+
+  letter-spacing: 0.08em;
+}
+
+.pdf-page--left
+.pdf-page-number {
+  right: auto;
+  left: 13px;
+}
+
+.pdf-flipbook[data-turn="next"]
+.pdf-page--right {
+  animation:
+    pdfTurnNext
+    440ms
+    cubic-bezier(
+      0.22,
+      0.72,
+      0.18,
+      1
+    );
+}
+
+.pdf-flipbook[data-turn="previous"]
+.pdf-page--left {
+  animation:
+    pdfTurnPrevious
+    440ms
+    cubic-bezier(
+      0.22,
+      0.72,
+      0.18,
+      1
+    );
+}
+
+@keyframes pdfTurnNext {
+  from {
+    opacity: 0.35;
+
+    transform:
+      rotateY(-16deg)
+      translateX(12px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      rotateY(0)
+      translateX(0);
+  }
+}
+
+@keyframes pdfTurnPrevious {
+  from {
+    opacity: 0.35;
+
+    transform:
+      rotateY(16deg)
+      translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      rotateY(0)
+      translateX(0);
+  }
+}
+
+.pdf-arrow {
+  display: grid;
+  place-items: center;
+
+  width: 46px;
+  height: 46px;
+
+  border:
+    1px solid
+    rgba(17, 17, 17, 0.18);
+
+  border-radius: 50%;
+
+  color:
+    rgba(17, 17, 17, 0.74);
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 280ms ease,
+    color 280ms ease,
+    opacity 280ms ease,
+    transform 280ms ease;
+}
+
+.pdf-arrow:hover:not(:disabled) {
+  background:
+    rgba(17, 17, 17, 0.9);
+
+  color:
+    var(--paper);
+
+  transform: scale(1.05);
+}
+
+.pdf-arrow:disabled {
+  opacity: 0.22;
+
+  cursor: default;
+}
+
+.pdf-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap:
+    12px
+    28px;
+
+  margin-top: 24px;
+
+  color:
+    var(--soft-ink);
+
+  font-size: 9px;
+
+  letter-spacing: 0.12em;
+}
+
+.pdf-original-link {
+  position: relative;
+
+  color:
+    rgba(17, 17, 17, 0.72);
+
+  text-decoration: none;
+}
+
+.pdf-original-link::after {
+  position: absolute;
+
+  right: 0;
+  bottom: -5px;
+  left: 0;
+
+  height: 1px;
+
+  background:
+    currentColor;
+
+  content: "";
+
+  transform: scaleX(0);
+  transform-origin: right center;
+
+  transition:
+    transform 300ms ease;
+}
+
+.pdf-original-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+.pdf-error {
+  color:
+    rgba(135, 31, 31, 0.75);
+}
+
+/* =========================
+   IMAGE TRANSLATION
+   ========================= */
+
+.lightbox-content {
+  display: grid;
+  align-content: center;
+  gap: 17px;
+
+  width: 100%;
+  height: 100%;
+}
+
+.lightbox-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap:
+    clamp(
+      24px,
+      4vw,
+      70px
+    );
+
+  min-width: 0;
+  min-height: 0;
+}
+
+.lightbox-image {
+  flex: 0 1 auto;
+
+  max-width: 72vw;
+  max-height:
+    calc(
+      100vh -
+      120px
+    );
+}
+
+.lightbox-stage:has(
+  .translation-panel:not([hidden])
+)
+.lightbox-image {
+  max-width: 54vw;
+}
+
+.translation-panel {
+  flex:
+    0
+    0
+    min(
+      340px,
+      30vw
+    );
+
+  max-height:
+    calc(
+      100vh -
+      150px
+    );
+
+  padding:
+    27px
+    25px;
+
+  overflow-y: auto;
+
+  border-left:
+    1px solid
+    rgba(17, 17, 17, 0.16);
+
+  color: var(--ink);
+}
+
+.translation-label {
+  margin: 0 0 13px;
+
+  color:
+    var(--light-ink);
+
+  font-size: 9px;
+
+  letter-spacing: 0.15em;
+}
+
+.translation-title {
+  margin: 0 0 22px;
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(
+      25px,
+      2.5vw,
+      38px
+    );
+
+  font-weight: 400;
+
+  line-height: 1;
+}
+
+.translation-content {
+  display: grid;
+  gap: 11px;
+}
+
+.translation-content p {
+  margin: 0;
+
+  padding-bottom: 10px;
+
+  border-bottom:
+    1px solid
+    rgba(17, 17, 17, 0.09);
+
+  color:
+    rgba(17, 17, 17, 0.66);
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+.lightbox-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap:
+    10px
+    25px;
+}
+
+.translation-toggle {
+  position: relative;
+
+  padding-bottom: 4px;
+
+  color:
+    rgba(17, 17, 17, 0.76);
+
+  font-size: 9px;
+
+  letter-spacing: 0.13em;
+
+  cursor: pointer;
+}
+
+.translation-toggle::after {
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  height: 1px;
+
+  background:
+    currentColor;
+
+  content: "";
+}
+
+@media (max-width: 760px) {
+  .pdf-heading {
+    grid-template-columns: 1fr;
+
+    gap: 6px;
+  }
+
+  .pdf-heading .section-number {
+    padding-top: 0;
+  }
+
+  .flipbook-shell {
+    grid-template-columns:
+      38px
+      minmax(0, 1fr)
+      38px;
+
+    width: 100%;
+
+    gap: 7px;
+  }
+
+  .pdf-arrow {
+    width: 36px;
+    height: 36px;
+
+    font-size: 15px;
+  }
+
+  .pdf-flipbook {
+    grid-template-columns: 1fr;
+
+    width:
+      min(
+        520px,
+        77vw
+      );
+
+    margin: 0 auto;
+
+    aspect-ratio: 0.707 / 1;
+  }
+
+  .pdf-page--right {
+    display: none;
+  }
+
+  .lightbox-stage {
+    display: grid;
+    justify-items: center;
+
+    overflow-y: auto;
+  }
+
+  .lightbox-image,
+  .lightbox-stage:has(
+    .translation-panel:not([hidden])
+  )
+  .lightbox-image {
+    max-width: 88vw;
+    max-height: 67vh;
+  }
+
+  .translation-panel {
+    width: 88vw;
+    max-height: 31vh;
+
+    padding:
+      20px
+      18px;
+
+    border-top:
+      1px solid
+      rgba(17, 17, 17, 0.16);
+
+    border-left: 0;
+  }
+}
+/*
+  PDF 区域始终显示。
+  即使 PDF 加载失败，也能看到标题和错误提示。
+*/
+.pdf-showcase.reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+/* =========================
+   IMAGE FLIPBOOK FIX
+   ========================= */
+
+.pdf-showcase.reveal {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.pdf-page-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: center;
+
+  background: #ffffff;
+}
+
+.pdf-page.is-blank {
+  background:
+    rgba(255, 255, 255, 0.3);
+
+  box-shadow: none;
+}
+
+.pdf-page.is-blank
+.pdf-page-image {
+  display: none;
+}
+
+.pdf-page.is-loading::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  color:
+    rgba(17, 17, 17, 0.35);
+
+  content: "LOADING";
+
+  font-size: 9px;
+
+  letter-spacing: 0.15em;
+
+  transform:
+    translate(-50%, -50%);
+}
+
+@media (max-width: 760px) {
+  .pdf-flipbook
+  .pdf-page--right {
+    display: none;
+  }
+
+  .pdf-flipbook
+  .pdf-page--left {
+    display: grid;
+  }
+}
+/* =========================
+   VIDEO EDITING
+   ========================= */
+
+.video-section {
+  margin-top:
+    clamp(
+      190px,
+      29vh,
+      340px
+    );
+}
+
+.video-section .section-heading {
+  margin-bottom:
+    clamp(
+      48px,
+      8vh,
+      88px
+    );
+}
+
+.video-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    clamp(
+      48px,
+      8vw,
+      120px
+    );
+
+  align-items: start;
+
+  width: 100%;
+}
+
+.video-card {
+  min-width: 0;
+  margin: 0;
+}
+
+.video-card--lower {
+  margin-top: 85px;
+}
+
+.video-frame {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(17, 17, 17, 0.14);
+
+  background:
+    rgba(255, 255, 255, 0.42);
+
+  box-shadow:
+    0 18px 50px
+    rgba(17, 17, 17, 0.045);
+}
+
+.portfolio-video {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  background: #111111;
+
+  object-fit: contain;
+}
+
+.video-copy {
+  display: grid;
+
+  grid-template-columns:
+    34px
+    minmax(0, 1fr);
+
+  column-gap: 16px;
+
+  margin-top: 18px;
+}
+
+.video-number {
+  grid-row:
+    1 / span 2;
+
+  margin: 5px 0 0;
+
+  color:
+    rgba(17, 17, 17, 0.34);
+
+  font-size: 9px;
+
+  letter-spacing: 0.14em;
+}
+
+.video-title {
+  margin: 0;
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    serif;
+
+  font-size:
+    clamp(
+      24px,
+      2.5vw,
+      38px
+    );
+
+  font-weight: 400;
+
+  line-height: 1.05;
+}
+
+.video-role {
+  margin: 9px 0 0;
+
+  color:
+    rgba(17, 17, 17, 0.54);
+
+  font-size: 10px;
+
+  line-height: 1.6;
+  letter-spacing: 0.07em;
+}
+
+@media (max-width: 760px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+
+    gap: 85px;
+  }
+
+  .video-card--lower {
+    margin-top: 0;
+  }
+
+  .video-copy {
+    grid-template-columns:
+      29px
+      minmax(0, 1fr);
+
+    column-gap: 12px;
+  }
+}

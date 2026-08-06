@@ -1,0 +1,873 @@
+:root {
+  --paper: #f4f0e8;
+  --ink: #111111;
+
+  --caption:
+    rgba(17, 17, 17, 0.47);
+
+  --secondary:
+    rgba(17, 17, 17, 0.58);
+
+  --line:
+    rgba(17, 17, 17, 0.16);
+
+  --image-background:
+    rgba(17, 17, 17, 0.025);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  margin: 0;
+
+  background:
+    var(--paper);
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+
+  overflow-x: hidden;
+
+  background:
+    var(--paper);
+
+  color:
+    var(--ink);
+
+  font-family:
+    "DM Sans",
+    Arial,
+    sans-serif;
+
+  opacity: 0;
+
+  transition:
+    opacity 650ms ease;
+}
+
+body.is-loaded {
+  opacity: 1;
+}
+
+body.is-leaving {
+  opacity: 0;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  padding: 0;
+  border: 0;
+
+  background: none;
+}
+
+.gallery-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  z-index: 30;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding:
+    25px
+    clamp(22px, 3.2vw, 54px);
+
+  pointer-events: none;
+}
+
+.gallery-name,
+.gallery-navigation {
+  pointer-events: auto;
+}
+
+.gallery-name {
+  margin: 0;
+
+  font-size:
+    clamp(12px, 0.95vw, 15px);
+
+  font-weight: 500;
+
+  letter-spacing: 0.08em;
+}
+
+.gallery-navigation {
+  display: flex;
+  align-items: center;
+  gap: 27px;
+}
+
+.gallery-section-name {
+  margin: 0;
+
+  color:
+    var(--secondary);
+
+  font-size: 10px;
+  font-weight: 400;
+
+  letter-spacing: 0.16em;
+}
+
+.gallery-back {
+  position: relative;
+
+  color:
+    rgba(17, 17, 17, 0.75);
+
+  font-size: 10px;
+
+  letter-spacing: 0.15em;
+
+  text-decoration: none;
+}
+
+.gallery-back::after {
+  position: absolute;
+  right: 0;
+  bottom: -5px;
+  left: 0;
+
+  height: 1px;
+
+  background:
+    currentColor;
+
+  content: "";
+
+  transform: scaleX(0);
+  transform-origin: right center;
+
+  transition:
+    transform 320ms ease;
+}
+
+.gallery-back:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/*
+  背景年份。
+*/
+.year-marker {
+  position: fixed;
+  z-index: 0;
+
+  margin: 0;
+
+  color:
+    rgba(17, 17, 17, 0.047);
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      145px,
+      20vw,
+      350px
+    );
+
+  font-weight: 400;
+
+  line-height: 0.78;
+
+  letter-spacing: -0.055em;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.year-marker--start {
+  top: 7vh;
+  left: 2.2vw;
+}
+
+.year-marker--end {
+  right: 3vw;
+  bottom: 5vh;
+}
+
+.gallery-main {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  min-height: 100vh;
+
+  padding:
+    clamp(165px, 21vh, 230px)
+    clamp(22px, 5vw, 86px)
+    clamp(250px, 32vh, 390px);
+}
+
+.gallery-content {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+/*
+  滚动出现动画。
+*/
+.gallery-item {
+  opacity: 0;
+
+  transform:
+    translateY(34px);
+
+  transition:
+    opacity 850ms ease,
+    transform
+    1000ms
+    cubic-bezier(
+      0.22,
+      0.72,
+      0.18,
+      1
+    );
+}
+
+.gallery-item.is-visible {
+  opacity: 1;
+
+  transform:
+    translateY(0);
+}
+
+/*
+  每个项目组的标题。
+*/
+.project-group {
+  margin-bottom:
+    clamp(
+      145px,
+      22vh,
+      250px
+    );
+}
+
+.project-heading {
+  display: grid;
+  grid-template-columns:
+    auto
+    minmax(0, 1fr);
+
+  gap:
+    18px
+    26px;
+
+  align-items: start;
+
+  max-width: 760px;
+  margin-bottom: 32px;
+}
+
+.project-index {
+  padding-top: 4px;
+
+  color:
+    rgba(17, 17, 17, 0.35);
+
+  font-size: 10px;
+
+  letter-spacing: 0.12em;
+}
+
+.project-title {
+  margin: 0;
+
+  font-family:
+    "DM Serif Display",
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(
+      27px,
+      3.2vw,
+      52px
+    );
+
+  font-weight: 400;
+
+  line-height: 1;
+
+  letter-spacing: -0.025em;
+}
+
+.project-description {
+  grid-column: 2;
+
+  max-width: 600px;
+  margin: -4px 0 0;
+
+  color:
+    rgba(17, 17, 17, 0.52);
+
+  font-size:
+    clamp(
+      11px,
+      0.85vw,
+      13px
+    );
+
+  line-height: 1.65;
+}
+
+/*
+  所有图片按钮。
+*/
+.gallery-image-button {
+  display: block;
+
+  width: 100%;
+
+  overflow: hidden;
+
+  background:
+    var(--image-background);
+
+  cursor: zoom-in;
+}
+
+.gallery-image {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: center;
+
+  transform: scale(1);
+
+  transition:
+    transform
+    750ms
+    cubic-bezier(
+      0.22,
+      0.72,
+      0.18,
+      1
+    ),
+
+    filter 600ms ease;
+}
+
+.gallery-image-button:hover
+.gallery-image {
+  filter:
+    contrast(1.015);
+
+  transform:
+    scale(1.012);
+}
+
+.gallery-caption {
+  width: 100%;
+  margin: 9px 0 0;
+
+  color:
+    var(--caption);
+
+  font-size:
+    clamp(
+      9px,
+      0.72vw,
+      12px
+    );
+
+  font-weight: 400;
+
+  letter-spacing: 0.035em;
+
+  line-height: 1.45;
+
+  text-align: center;
+}
+
+/*
+  人物建模五步过程。
+*/
+.character-process {
+  padding-top: 3vh;
+}
+
+.character-process-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      5,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    clamp(
+      10px,
+      1.4vw,
+      22px
+    );
+
+  width: 100%;
+}
+
+.process-card {
+  min-width: 0;
+  margin: 0;
+}
+
+.process-card
+.gallery-image-button {
+  aspect-ratio: 16 / 10;
+}
+
+/*
+  给五张过程图制造轻微的高低差，
+  同时保持它们仍然属于一组。
+*/
+.process-card:nth-child(2) {
+  margin-top: 26px;
+}
+
+.process-card:nth-child(3) {
+  margin-top: 9px;
+}
+
+.process-card:nth-child(4) {
+  margin-top: 38px;
+}
+
+.process-card:nth-child(5) {
+  margin-top: 17px;
+}
+
+/*
+  武器正面和侧面。
+*/
+.weapon-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    clamp(
+      22px,
+      4vw,
+      68px
+    );
+
+  width:
+    min(
+      900px,
+      78vw
+    );
+
+  margin: 0 auto;
+}
+
+.weapon-card {
+  min-width: 0;
+  margin: 0;
+}
+
+.weapon-card
+.gallery-image-button {
+  aspect-ratio: 16 / 10;
+}
+
+.weapon-card:nth-child(2) {
+  margin-top: 54px;
+}
+
+/*
+  UE5 总览。
+*/
+.ue5-overview {
+  width:
+    min(
+      930px,
+      75vw
+    );
+
+  margin:
+    0
+    auto
+    clamp(
+      155px,
+      22vh,
+      250px
+    );
+}
+
+.overview-card {
+  margin: 0;
+}
+
+.overview-card
+.gallery-image-button {
+  aspect-ratio: 16 / 9;
+}
+
+/*
+  UE5 细节交错网格。
+*/
+.ue5-detail-heading {
+  margin-bottom: 40px;
+}
+
+.ue5-detail-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    clamp(
+      75px,
+      13vh,
+      145px
+    )
+    clamp(
+      38px,
+      8vw,
+      130px
+    );
+
+  align-items: start;
+}
+
+.ue5-card {
+  min-width: 0;
+  margin: 0;
+}
+
+.ue5-card
+.gallery-image-button {
+  aspect-ratio: 16 / 10;
+}
+
+.ue5-card:nth-child(even) {
+  margin-top: 105px;
+}
+
+.ue5-card:nth-child(3) {
+  width: 91%;
+}
+
+.ue5-card:nth-child(4) {
+  width: 94%;
+  margin-left: auto;
+}
+
+.ue5-card:nth-child(5) {
+  width: 95%;
+  margin-left: 4%;
+}
+
+.ue5-card:nth-child(6) {
+  width: 91%;
+  margin-right: 3%;
+  margin-left: auto;
+}
+
+/*
+  全屏图片预览。
+*/
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: grid;
+  place-items: center;
+
+  padding:
+    clamp(
+      22px,
+      4vw,
+      68px
+    );
+
+  background:
+    rgba(
+      244,
+      240,
+      232,
+      0.97
+    );
+
+  opacity: 0;
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition:
+    opacity 380ms ease,
+    visibility 380ms ease;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+.lightbox-content {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+
+  width: 100%;
+  height: 100%;
+}
+
+.lightbox-image {
+  display: block;
+
+  max-width: 92vw;
+  max-height:
+    calc(
+      100vh -
+      110px
+    );
+
+  object-fit: contain;
+
+  opacity: 0;
+
+  transform:
+    scale(0.985);
+
+  transition:
+    opacity 450ms ease,
+    transform 550ms ease;
+}
+
+.lightbox.is-open
+.lightbox-image {
+  opacity: 1;
+
+  transform:
+    scale(1);
+}
+
+.lightbox-caption {
+  margin: 0;
+
+  color:
+    rgba(17, 17, 17, 0.5);
+
+  font-size: 11px;
+
+  letter-spacing: 0.04em;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 29px;
+
+  width: 42px;
+  height: 42px;
+
+  color:
+    rgba(17, 17, 17, 0.7);
+
+  font-size: 26px;
+  font-weight: 300;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    transform 280ms ease;
+}
+
+.lightbox-close:hover {
+  transform:
+    rotate(90deg);
+}
+
+body.is-lightbox-open {
+  overflow: hidden;
+}
+
+@media (max-width: 1050px) {
+  .character-process-grid {
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(0, 1fr)
+      );
+  }
+
+  .process-card:nth-child(4),
+  .process-card:nth-child(5) {
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 760px) {
+  .gallery-header {
+    padding:
+      20px
+      18px;
+  }
+
+  .gallery-section-name {
+    display: none;
+  }
+
+  .year-marker {
+    font-size:
+      clamp(
+        100px,
+        31vw,
+        170px
+      );
+
+    color:
+      rgba(
+        17,
+        17,
+        17,
+        0.038
+      );
+  }
+
+  .year-marker--start {
+    top: 11vh;
+    left: 3vw;
+  }
+
+  .year-marker--end {
+    right: 4vw;
+    bottom: 7vh;
+  }
+
+  .gallery-main {
+    padding:
+      145px
+      18px
+      220px;
+  }
+
+  .project-group {
+    margin-bottom: 130px;
+  }
+
+  .project-heading {
+    grid-template-columns:
+      1fr;
+
+    gap: 8px;
+
+    margin-bottom: 25px;
+  }
+
+  .project-description,
+  .project-index {
+    grid-column: 1;
+  }
+
+  .project-description {
+    margin-top: 2px;
+  }
+
+  .character-process-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    gap: 28px 12px;
+  }
+
+  .process-card,
+  .process-card:nth-child(2),
+  .process-card:nth-child(3),
+  .process-card:nth-child(4),
+  .process-card:nth-child(5) {
+    margin-top: 0;
+  }
+
+  .process-card:nth-child(even) {
+    margin-top: 25px;
+  }
+
+  .weapon-grid {
+    grid-template-columns: 1fr;
+
+    width: 100%;
+  }
+
+  .weapon-card:nth-child(2) {
+    margin-top: 0;
+  }
+
+  .ue5-overview {
+    width: 100%;
+    margin-bottom: 130px;
+  }
+
+  .ue5-detail-grid {
+    grid-template-columns: 1fr;
+
+    gap: 85px;
+  }
+
+  .ue5-card,
+  .ue5-card:nth-child(even),
+  .ue5-card:nth-child(3),
+  .ue5-card:nth-child(4),
+  .ue5-card:nth-child(5),
+  .ue5-card:nth-child(6) {
+    width: 100%;
+    margin: 0;
+  }
+}
+
+@media (
+  prefers-reduced-motion:
+  reduce
+) {
+  body,
+  .gallery-item,
+  .gallery-image,
+  .lightbox,
+  .lightbox-image {
+    transition-duration: 1ms;
+  }
+}

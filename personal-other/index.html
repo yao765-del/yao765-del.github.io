@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    FocusFlow and Video Editing | Siyuan Yao
+  </title>
+
+  <script>
+    document.documentElement.classList.add("js");
+  </script>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./personal-other.css"
+  >
+</head>
+
+<body>
+  <header class="page-header">
+    <a
+      class="header-name page-link"
+      href="../portfolio.html"
+    >
+      SIYUAN YAO
+    </a>
+
+    <div class="header-right">
+      <span class="header-section">
+        PERSONAL APP / OTHER
+      </span>
+
+      <a
+        class="back-link page-link"
+        href="../portfolio.html"
+      >
+        BACK
+      </a>
+    </div>
+  </header>
+
+  <div
+    class="background-year background-year--top"
+    aria-hidden="true"
+  >
+    2024
+  </div>
+
+  <div
+    class="background-year background-year--bottom"
+    aria-hidden="true"
+  >
+    2026
+  </div>
+
+  <main class="page-main">
+    <!-- FocusFlow 完整策划案翻页展示 -->
+<section
+  class="pdf-showcase reveal is-visible"
+  id="designDocument"
+>
+  <div class="pdf-heading">
+    <p class="section-number">
+      01
+    </p>
+
+    <div>
+      <p class="pdf-label">
+        FULL DESIGN DOCUMENT
+      </p>
+
+      <h1 class="pdf-title">
+        FocusFlow App Design Statement
+      </h1>
+
+      <p class="pdf-description">
+        An eleven-page project document covering the product concept, interface structure, core functions, interaction flow, and development process.
+      </p>
+    </div>
+  </div>
+
+  <div class="flipbook-shell">
+    <button
+      class="pdf-arrow"
+      id="pdfPrev"
+      type="button"
+      aria-label="Previous pages"
+    >
+      ←
+    </button>
+
+    <div
+      class="pdf-flipbook"
+      id="pdfFlipbook"
+      tabindex="0"
+      aria-label="FocusFlow design document"
+    >
+      <div
+        class="pdf-page pdf-page--left is-blank"
+        id="pdfLeftWrap"
+      >
+        <img
+          class="pdf-page-image"
+          id="pdfLeftImage"
+          src=""
+          alt=""
+        >
+
+        <span
+          class="pdf-page-number"
+          id="pdfLeftNumber"
+        ></span>
+      </div>
+
+      <div
+        class="pdf-page pdf-page--right"
+        id="pdfRightWrap"
+      >
+        <img
+          class="pdf-page-image"
+          id="pdfRightImage"
+          src="../assets/images/projects/focusflow/pdf-pages/focusflow-page-01.png"
+          alt="FocusFlow design document page 1"
+        >
+
+        <span
+          class="pdf-page-number"
+          id="pdfRightNumber"
+        >
+          01
+        </span>
+      </div>
+    </div>
+
+    <button
+      class="pdf-arrow"
+      id="pdfNext"
+      type="button"
+      aria-label="Next pages"
+    >
+      →
+    </button>
+  </div>
+
+  <div class="pdf-controls">
+    <span id="pdfCounter">
+      PAGE 1 / 11
+    </span>
+
+    <span
+      class="pdf-error"
+      id="pdfError"
+      hidden
+    >
+      PAGE IMAGE COULD NOT LOAD
+    </span>
+
+    <a
+      class="pdf-original-link"
+      href="../assets/docs/FocusFlow-Design.pdf"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      OPEN ORIGINAL PDF
+    </a>
+  </div>
+</section>
+
+    <!-- 项目开头 -->
+    <section class="project-hero reveal">
+      <div class="hero-copy">
+        <p class="section-number">
+          01
+        </p>
+
+        <h1 class="hero-title">
+          FOCUSFLOW
+        </h1>
+
+        <p class="hero-subtitle">
+          ADHD Executive Function Support App
+        </p>
+
+        <p class="hero-description">
+          FocusFlow is a mobile task-support prototype designed for people with ADHD traits. It combines flexible task planning, time visualization, and gamified feedback within one mobile interface.
+        </p>
+
+        <div class="project-meta">
+          <div class="meta-row">
+            <span class="meta-label">
+              TYPE
+            </span>
+
+            <span class="meta-value">
+              Mobile App Front-End Prototype
+            </span>
+          </div>
+
+          <div class="meta-row">
+            <span class="meta-label">
+              ROLE
+            </span>
+
+            <span class="meta-value">
+              Product Concept, UX/UI Design and Front-End Development
+            </span>
+          </div>
+
+          <div class="meta-row">
+            <span class="meta-label">
+              TOOLS
+            </span>
+
+            <span class="meta-value">
+              React Native, Expo and Visual Studio Code
+            </span>
+          </div>
+
+          <div class="meta-row">
+            <span class="meta-label">
+              YEAR
+            </span>
+
+            <span class="meta-value">
+              2026
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-gallery">
+        <figure class="hero-phone hero-phone--left">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="FocusFlow Simple Mode"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-01-simple-home.jpg"
+              alt="FocusFlow Simple Mode home page"
+            >
+          </button>
+
+          <figcaption>
+            Simple Mode
+          </figcaption>
+        </figure>
+
+        <figure class="hero-phone hero-phone--center">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="FocusFlow System Mode"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-02-system-home.jpg"
+              alt="FocusFlow System Mode home page"
+            >
+          </button>
+
+          <figcaption>
+            System Mode
+          </figcaption>
+        </figure>
+
+        <figure class="hero-phone hero-phone--right">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="FocusFlow Host Profile"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-05-System-profile.jpg"
+              alt="FocusFlow System Mode Host profile"
+            >
+          </button>
+
+          <figcaption>
+            Host Profile
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 双模式 -->
+    <section class="project-section reveal">
+      <div class="section-heading">
+        <p class="section-number">
+          01.1
+        </p>
+
+        <div>
+          <h2 class="section-title">
+            DUAL-MODE TASK SUPPORT
+          </h2>
+
+          <p class="section-description">
+            Two interface modes support different levels of energy, attention, and task pressure.
+          </p>
+        </div>
+      </div>
+
+      <div class="dual-mode-grid">
+        <figure class="large-phone-card">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="Simple Mode Home Page"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-01-simple-home.jpg"
+              alt="FocusFlow Simple Mode home page"
+              loading="lazy"
+            >
+          </button>
+
+          <figcaption class="detailed-caption">
+            <span class="caption-title">
+              SIMPLE MODE
+            </span>
+
+            <span class="caption-text">
+              A reduced interface for low-energy periods and quick task initiation.
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="large-phone-card large-phone-card--lower">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="System Mode Home Page"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-02-system-home.jpg"
+              alt="FocusFlow System Mode home page"
+              loading="lazy"
+            >
+          </button>
+
+          <figcaption class="detailed-caption">
+            <span class="caption-title">
+              SYSTEM MODE
+            </span>
+
+            <span class="caption-text">
+              A game-inspired interface with system tasks, progress records, and rewards.
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 新建任务 -->
+    <section class="planning-section reveal">
+      <div class="planning-image">
+        <figure class="single-phone-card">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="Create Task and Reminder Settings"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-03-create-task.jpg"
+              alt="FocusFlow Create Task page"
+              loading="lazy"
+            >
+          </button>
+
+          <figcaption>
+            Create Task
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="planning-copy">
+        <p class="section-number">
+          01.2
+        </p>
+
+        <h2 class="section-title">
+          FLEXIBLE TASK PLANNING
+        </h2>
+
+        <p class="section-description">
+          The task system provides three reminder structures for different schedules and attention states.
+        </p>
+
+        <div class="planning-feature">
+          <span class="planning-feature-number">
+            01
+          </span>
+
+          <div>
+            <h3>
+              Exact Time
+            </h3>
+
+            <p>
+              A fixed reminder for tasks with a clear schedule.
+            </p>
+          </div>
+        </div>
+
+        <div class="planning-feature">
+          <span class="planning-feature-number">
+            02
+          </span>
+
+          <div>
+            <h3>
+              Flexible Exact Time
+            </h3>
+
+            <p>
+              A reminder that can move within a short period around the selected time.
+            </p>
+          </div>
+        </div>
+
+        <div class="planning-feature">
+          <span class="planning-feature-number">
+            03
+          </span>
+
+          <div>
+            <h3>
+              Random Time Range
+            </h3>
+
+            <p>
+              A reminder sent at a random point within a selected period.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 用户身份 -->
+    <section class="project-section reveal">
+      <div class="section-heading">
+        <p class="section-number">
+          01.3
+        </p>
+
+        <div>
+          <h2 class="section-title">
+            USER AND HOST IDENTITY
+          </h2>
+
+          <p class="section-description">
+            Simple Mode presents a standard user profile. System Mode transforms the user into a Host within the app’s game-inspired task structure.
+          </p>
+        </div>
+      </div>
+
+      <div class="dual-mode-grid profile-grid">
+        <figure class="large-phone-card">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="Simple Mode User Profile"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-05-Simple-profile.jpg"
+              alt="FocusFlow Simple Mode user profile"
+              loading="lazy"
+            >
+          </button>
+
+          <figcaption class="detailed-caption">
+            <span class="caption-title">
+              USER PROFILE
+            </span>
+
+            <span class="caption-text">
+              Account access and basic personal settings.
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="large-phone-card large-phone-card--lower">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="System Mode Host Profile"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-05-System-profile.jpg"
+              alt="FocusFlow System Mode Host profile"
+              loading="lazy"
+            >
+          </button>
+
+          <figcaption class="detailed-caption">
+            <span class="caption-title">
+              HOST IDENTITY
+            </span>
+
+            <span class="caption-text">
+              Growth categories, system identity, coins, and reward access.
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 功能组 -->
+    <section class="project-section reveal">
+      <div class="section-heading">
+        <p class="section-number">
+          01.4
+        </p>
+
+        <div>
+          <h2 class="section-title">
+            SUPPORT AND REWARD SYSTEM
+          </h2>
+
+          <p class="section-description">
+            Focus tools and immediate rewards turn task completion into visible progress.
+          </p>
+        </div>
+      </div>
+
+      <div class="support-grid">
+        <figure class="support-card">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="App Whitelist Settings"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-06-whitelist.jpg"
+              alt="FocusFlow App Whitelist settings"
+              loading="lazy"
+            >
+          </button>
+
+          <figcaption class="detailed-caption">
+            <span class="caption-title">
+              APP WHITELIST
+            </span>
+
+            <span class="caption-text">
+              Users record apps that should remain available during future focus sessions.
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="support-card support-card--lower">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="Growth and Coin Settings"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-07-growth-settings.jpg"
+              alt="FocusFlow growth and coin settings"
+              loading="lazy"
+            >
+          </button>
+
+          <figcaption class="detailed-caption">
+            <span class="caption-title">
+              GROWTH AND COINS
+            </span>
+
+            <span class="caption-text">
+              Completed tasks add progress to growth categories and provide coin rewards.
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="support-card">
+          <button
+            class="image-button"
+            type="button"
+            data-caption="FocusFlow Reward Store"
+          >
+            <img
+              src="../assets/images/projects/focusflow/focusflow-08-store.jpg"
+              alt="FocusFlow Reward Store"
+              loading="lazy"
+            >
+          </button>
+
+          <figcaption class="detailed-caption">
+            <span class="caption-title">
+              REWARD STORE
+            </span>
+
+            <span class="caption-text">
+              Coins connect completed tasks with visible and customizable rewards.
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- PDF -->
+
+
+    <!-- 视频剪辑作品 -->
+<section class="video-section">
+  <div class="section-heading reveal">
+    <p class="section-number">
+      02
+    </p>
+
+    <div>
+      <h2 class="section-title">
+        VIDEO EDITING
+      </h2>
+
+      <p class="section-description">
+        Two selected video editing projects.
+      </p>
+    </div>
+  </div>
+
+  <div class="video-grid">
+
+    <!-- 视频一 -->
+    <article class="video-card reveal">
+      <div class="video-frame">
+        <video
+          class="portfolio-video"
+          controls
+          playsinline
+          preload="metadata"
+        >
+          <source
+            src="../assets/videos/video-editing/video-01.mp4"
+            type="video/mp4"
+          >
+
+          Your browser does not support video playback.
+        </video>
+      </div>
+
+      <div class="video-copy">
+        <p class="video-number">
+          01
+        </p>
+
+        <h3 class="video-title">
+          Video Editing Project 01
+        </h3>
+
+        <p class="video-role">
+          Editing · Visual Storytelling
+        </p>
+      </div>
+    </article>
+
+    <!-- 视频二 -->
+    <article class="video-card video-card--lower reveal">
+      <div class="video-frame">
+        <video
+          class="portfolio-video"
+          controls
+          playsinline
+          preload="metadata"
+        >
+          <source
+            src="../assets/videos/video-editing/video-02.mp4"
+            type="video/mp4"
+          >
+
+          Your browser does not support video playback.
+        </video>
+      </div>
+
+      <div class="video-copy">
+        <p class="video-number">
+          02
+        </p>
+
+        <h3 class="video-title">
+          Video Editing Project 02
+        </h3>
+
+        <p class="video-role">
+          Editing · Media Production
+        </p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+    <a
+      class="back-to-top"
+      href="#"
+    >
+      BACK TO TOP
+    </a>
+  </main>
+
+  <!-- 图片放大层 -->
+  <div
+    class="lightbox"
+    id="imageLightbox"
+    aria-hidden="true"
+  >
+    <button
+      class="lightbox-close"
+      id="lightboxClose"
+      type="button"
+      aria-label="Close image"
+    >
+      ×
+    </button>
+
+    <div class="lightbox-content">
+  <div class="lightbox-stage">
+    <img
+      class="lightbox-image"
+      id="lightboxImage"
+      src=""
+      alt=""
+    >
+
+    <aside
+      class="translation-panel"
+      id="translationPanel"
+      hidden
+    >
+      <p class="translation-label">
+        ENGLISH TEXT
+      </p>
+
+      <h2
+        class="translation-title"
+        id="translationTitle"
+      ></h2>
+
+      <div
+        class="translation-content"
+        id="translationContent"
+      ></div>
+    </aside>
+  </div>
+
+  <div class="lightbox-footer">
+    <p
+      class="lightbox-caption"
+      id="lightboxCaption"
+    ></p>
+
+    <button
+      class="translation-toggle"
+      id="translationToggle"
+      type="button"
+      hidden
+    >
+      VIEW ENGLISH TEXT
+    </button>
+  </div>
+</div>
+
+
+<script src="./personal-other.js"></script>
+</body>
+</html>

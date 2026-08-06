@@ -1,0 +1,214 @@
+:root {
+  --paper: #f4f0e8;
+  --ink: #111111;
+  --soft-ink: rgba(17, 17, 17, 0.34);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+
+  background: var(--paper);
+  color: var(--ink);
+
+  font-family:
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+/* =========================
+   顶部信息
+   ========================= */
+
+.page-header {
+  position: fixed;
+  z-index: 10;
+
+  top: 32px;
+  left: 42px;
+  right: 42px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.back-link {
+  padding: 10px 15px;
+
+  border: 1px solid rgba(17, 17, 17, 0.56);
+  border-radius: 999px;
+
+  color: var(--ink);
+
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.back-link:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.page-heading {
+  text-align: right;
+}
+
+.owner-name {
+  margin: 0 0 7px;
+
+  font-size: 10px;
+  letter-spacing: 0.16em;
+}
+
+.page-title {
+  margin: 0;
+
+  font-size: clamp(24px, 3vw, 44px);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+}
+
+/* =========================
+   两个互动入口
+   ========================= */
+
+.entry-grid {
+  width: min(1120px, calc(100vw - 84px));
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 138px 0 62px;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(70px, 9vw, 150px);
+}
+
+.entry-card {
+  min-width: 0;
+  padding: 0;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+
+  font: inherit;
+  text-align: center;
+
+  cursor: pointer;
+}
+
+/* p5 动画显示区域 */
+.art-stage {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+
+  border-top: 1px solid var(--soft-ink);
+  border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+
+  transform: translateY(0);
+
+  transition:
+    transform 500ms cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    );
+}
+
+.art-stage canvas {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+}
+
+.entry-card:hover .art-stage {
+  transform: translateY(-8px);
+}
+
+/* 入口标题 */
+.entry-caption {
+  width: 100%;
+  padding-top: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.entry-name {
+  font-size: clamp(13px, 1.25vw, 17px);
+  letter-spacing: 0.09em;
+
+  transition:
+    transform 400ms cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    );
+}
+
+.entry-card:hover .entry-name {
+  transform: translateY(-2px);
+}
+
+/* =========================
+   手机屏幕
+   ========================= */
+
+@media (max-width: 760px) {
+  .page-header {
+    position: relative;
+
+    top: auto;
+    left: auto;
+    right: auto;
+
+    padding: 22px 20px 0;
+  }
+
+  .entry-grid {
+    width: auto;
+    min-height: auto;
+    padding: 70px 20px 48px;
+
+    grid-template-columns: 1fr;
+    gap: 74px;
+  }
+
+  .art-stage {
+    max-height: 430px;
+  }
+}

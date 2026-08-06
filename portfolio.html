@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Siyuan Yao Portfolio</title>
+
+  <link
+    rel="stylesheet"
+    href="./portfolio.css"
+  >
+
+  <!-- p5.js 用来绘制粒子动画 -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"
+  ></script>
+</head>
+
+<body>
+    <!-- 粒子形成后逐渐出现的真实照片 -->
+  <img
+    id="realPortrait"
+    src="./assets/images/portrait/portrait-home.jpg"
+    alt="Portrait of Siyuan Yao"
+  >
+  <!--
+    p5.js 会把粒子画布放进这个区域。
+    这里不要放照片 img 标签。
+  -->
+  <div
+    id="particleStage"
+    aria-hidden="true"
+  ></div>
+
+  <!-- 页面上方文字 -->
+  <header class="site-header interface-layer">
+    <h1 class="site-name">
+      SIYUAN YAO
+    </h1>
+
+    <p class="site-year">
+      PORTFOLIO 2026
+    </p>
+  </header>
+
+  <!-- 页面下方三个作品入口 -->
+   <aside
+  class="resume-panel"
+  id="resumePanel"
+  aria-label="Profile"
+>
+  <div class="resume-identity">
+    <p class="resume-name-cn">
+      姚思远
+    </p>
+
+    <h2 class="resume-name-en">
+      SIYUAN YAO
+    </h2>
+  </div>
+
+  <div class="resume-entry">
+    <p class="resume-meta">
+      Suzhou City University, Ball State University
+    </p>
+
+    <p class="resume-highlight">
+      Dual Degree
+    </p>
+
+    <p class="resume-detail">
+      Journalism · Media
+    </p>
+  </div>
+
+  <div class="resume-entry">
+    <p class="resume-highlight">
+      Vedio game Developer
+    </p>
+
+    <p class="resume-detail">
+      Narrative Design · Worldbuilding · Interactive Media
+    </p>
+  </div>
+
+  <div class="resume-entry">
+  <p class="resume-highlight">
+    Interests
+  </p>
+
+  <p class="resume-detail">
+    Digital Art · Multimedia Design
+  </p>
+</div>
+
+  <a
+    class="resume-mail"
+    href="mailto:yao801860@gmail.com"
+  >
+    yao801860@gmail.com
+  </a>
+</aside>
+  <nav
+    class="work-navigation interface-layer"
+    aria-label="Selected work categories"
+  >
+    <button
+      class="work-button"
+      type="button"
+      data-category="modeling"
+    >
+      <span class="work-number">01</span>
+      <span class="work-name">3D MODELING</span>
+    </button>
+
+    <button
+      class="work-button"
+      type="button"
+      data-category="game-design"
+    >
+      <span class="work-number">02</span>
+      <span class="work-name">GAME DESIGN</span>
+    </button>
+
+    <button
+      class="work-button"
+      type="button"
+      data-category="personal-app"
+    >
+      <span class="work-number">03</span>
+      <span class="work-name">PERSONAL APP / OTHER</span>
+    </button>
+  </nav>
+
+  <!-- 只有照片路径错误时才会出现 -->
+  <p
+    id="imageError"
+    class="image-error"
+    hidden
+  >
+    PORTRAIT IMAGE COULD NOT BE LOADED
+  </p>
+
+  <!-- 普通页面交互 -->
+  <script src="./portfolio.js"></script>
+
+  <!-- 粒子照片动画 -->
+  <script src="./portfolio-sketch.js"></script>
+  <script src="./page-transition.js"></script>
+  <a
+  class="portfolio-back"
+  href="./index.html"
+  aria-label="Back to opening page"
+>
+  BACK
+</a>
+</body>
+</html>

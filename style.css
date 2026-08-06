@@ -1,0 +1,79 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #f4f0e8;
+}
+
+body {
+  overscroll-behavior: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#p5-root {
+  position: fixed;
+  inset: 0;
+}
+
+canvas {
+  display: block;
+}
+/* 开场帘子页右上角姓名 */
+.opening-name {
+  position: fixed;
+  top: 32px;
+  right: 38px;
+  z-index: 9999;
+
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+
+  color:
+    rgba(17, 17, 17, 0.68);
+
+  font-family:
+    "DM Sans",
+    Arial,
+    "Microsoft YaHei",
+    sans-serif;
+
+  font-size: 10px;
+  font-weight: 400;
+
+  line-height: 1;
+  letter-spacing: 0.12em;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.opening-name-cn {
+  letter-spacing: 0.14em;
+}
+
+.opening-name-en {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+
+@media (max-width: 760px) {
+  .opening-name {
+    top: 23px;
+    right: 20px;
+
+    gap: 7px;
+
+    font-size: 9px;
+  }
+
+  .opening-name-en {
+    font-size: 8px;
+  }
+}

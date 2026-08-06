@@ -1,0 +1,5005 @@
+<!doctype html>
+
+<html lang="zh-CN">
+
+<head>
+
+  <meta charset="utf-8" />
+
+
+
+  <meta
+
+    name="viewport"
+
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+
+  />
+
+
+
+  <title>Portfolio Curtain</title>
+
+
+
+  <style>
+
+    html,
+
+    body {
+
+      width: 100%;
+
+      height: 100%;
+
+      margin: 0;
+
+      overflow: hidden;
+
+      background: #f4f0e8;
+
+    }
+
+
+
+    body {
+
+      touch-action: none;
+
+      user-select: none;
+
+      -webkit-user-select: none;
+
+    }
+
+
+
+    #p5-root {
+
+      position: fixed;
+
+      inset: 0;
+
+    }
+
+
+
+    canvas {
+
+      display: block;
+
+    }
+
+  </style>
+
+<link rel="stylesheet" href="./style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.min.js"></script>
+
+</head>
+
+
+
+<body>
+
+  <main id="p5-root"></main>
+
+
+
+  <script>
+
+    const BG = '#f4f0e8';
+
+
+
+    const LINE_COLOR = [
+
+      42,
+
+      42,
+
+      39
+
+    ];
+
+
+
+    const ENTER_COLOR = [
+
+      63,
+
+      61,
+
+      56
+
+    ];
+
+
+
+    const ENTER_URL =
+
+      'portfolio.html';
+
+
+
+    const STRAND_COUNT = 112;
+
+    const NODE_COUNT = 42;
+
+
+
+    let curtain;
+
+    let enterBox;
+
+    let maskLayer;
+
+    let strands = [];
+
+
+
+    let leftTarget = 0;
+
+    let rightTarget = 0;
+
+
+
+    let leftOpen = 0;
+
+    let rightOpen = 0;
+
+
+
+    let leftLocked = false;
+
+    let rightLocked = false;
+
+
+
+    let gestureArmed = false;
+
+    let introFinished = false;
+
+
+
+    let hoverEnter = false;
+
+
+
+    let fading = false;
+
+    let fadeAlpha = 0;
+
+    let navigationStarted = false;
+
+
+
+    let lastFrame = 0;
+
+
+
+    function setup() {
+
+      const canvas = createCanvas(
+
+        windowWidth,
+
+        windowHeight
+
+      );
+
+
+
+      canvas.parent(
+
+        'p5-root'
+
+      );
+
+
+
+      pixelDensity(
+
+        Math.min(
+
+          window.devicePixelRatio || 1,
+
+          2
+
+        )
+
+      );
+
+
+
+      strokeCap(ROUND);
+
+      strokeJoin(ROUND);
+
+
+
+      textAlign(
+
+        CENTER,
+
+        CENTER
+
+      );
+
+
+
+      rebuildScene();
+
+
+
+      lastFrame = millis();
+
+    }
+
+
+
+    function rebuildScene() {
+
+      calculateLayout();
+
+
+
+      if (maskLayer) {
+
+        maskLayer.remove();
+
+      }
+
+
+
+      maskLayer = createGraphics(
+
+        width,
+
+        height
+
+      );
+
+
+
+      maskLayer.pixelDensity(1);
+
+
+
+      strands = [];
+
+
+
+      const gap =
+
+        curtain.width /
+
+        (STRAND_COUNT - 1);
+
+
+
+      for (
+
+        let i = 0;
+
+        i < STRAND_COUNT;
+
+        i += 1
+
+      ) {
+
+        const anchorX =
+
+          curtain.left +
+
+          i * gap;
+
+
+
+        const side =
+
+          anchorX < curtain.cx
+
+            ? -1
+
+            : 1;
+
+
+
+        const rank =
+
+          constrain(
+
+            abs(
+
+              anchorX -
+
+              curtain.cx
+
+            ) /
+
+              (
+
+                curtain.width *
+
+                0.5
+
+              ),
+
+            0,
+
+            1
+
+          );
+
+
+
+        strands.push(
+
+          new CurtainStrand(
+
+            i,
+
+            anchorX,
+
+            side,
+
+            rank
+
+          )
+
+        );
+
+      }
+
+    }
+
+
+
+    function calculateLayout() {
+
+      const curtainWidth =
+
+        min(
+
+          520,
+
+          width * 0.58
+
+        );
+
+
+
+      const curtainHeight =
+
+        min(
+
+          560,
+
+          height * 0.66
+
+        );
+
+
+
+      const centreX =
+
+        width * 0.5;
+
+
+
+      const topY =
+
+        max(
+
+          54,
+
+          height * 0.5 -
+
+            curtainHeight * 0.54
+
+        );
+
+
+
+      curtain = {
+
+        cx:
+
+          centreX,
+
+
+
+        top:
+
+          topY,
+
+
+
+        width:
+
+          curtainWidth,
+
+
+
+        height:
+
+          curtainHeight,
+
+
+
+        left:
+
+          centreX -
+
+          curtainWidth * 0.5,
+
+
+
+        right:
+
+          centreX +
+
+          curtainWidth * 0.5,
+
+
+
+        bottom:
+
+          topY +
+
+          curtainHeight,
+
+
+
+        tieY:
+
+          topY +
+
+          curtainHeight * 0.61,
+
+
+
+        leftTieX:
+
+          centreX -
+
+          curtainWidth * 0.36,
+
+
+
+        rightTieX:
+
+          centreX +
+
+          curtainWidth * 0.36
+
+      };
+
+
+
+      enterBox = {
+
+        cx:
+
+          centreX,
+
+
+
+        cy:
+
+          topY +
+
+          curtainHeight * 0.56,
+
+
+
+        w:
+
+          min(
+
+            172,
+
+            curtainWidth * 0.38
+
+          ),
+
+
+
+        h:
+
+          62
+
+      };
+
+
+
+      enterBox.x =
+
+        enterBox.cx -
+
+        enterBox.w * 0.5;
+
+
+
+      enterBox.y =
+
+        enterBox.cy -
+
+        enterBox.h * 0.5;
+
+    }
+
+
+
+    function draw() {
+
+      background(BG);
+
+
+
+      const now =
+
+        millis();
+
+
+
+      const dt =
+
+        constrain(
+
+          (
+
+            now -
+
+            lastFrame
+
+          ) /
+
+            16.6667,
+
+          0.45,
+
+          1.8
+
+        );
+
+
+
+      lastFrame =
+
+        now;
+
+
+
+      introFinished =
+
+        now > 2200;
+
+
+
+      updateOpening(dt);
+
+      updateEnterHover();
+
+
+
+      drawEnterBox();
+
+      drawStableEnterMask();
+
+
+
+      for (
+
+        const strand of strands
+
+      ) {
+
+        strand.update(
+
+          now,
+
+          dt
+
+        );
+
+      }
+
+
+
+      const ordered =
+
+        [...strands].sort(
+
+          (a, b) =>
+
+            b.rank -
+
+            a.rank
+
+        );
+
+
+
+      for (
+
+        const strand of ordered
+
+      ) {
+
+        strand.draw(now);
+
+      }
+
+
+
+      drawFade();
+
+    }
+
+
+
+    function updateOpening(dt) {
+
+      /*
+
+        越接近 1，
+
+        收束动作越慢、越柔和。
+
+      */
+
+      const follow =
+
+        1 -
+
+        pow(
+
+          0.925,
+
+          dt
+
+        );
+
+
+
+      if (leftLocked) {
+
+        leftTarget = 1;
+
+      }
+
+
+
+      if (rightLocked) {
+
+        rightTarget = 1;
+
+      }
+
+
+
+      leftOpen +=
+
+        (
+
+          leftTarget -
+
+          leftOpen
+
+        ) *
+
+        follow;
+
+
+
+      rightOpen +=
+
+        (
+
+          rightTarget -
+
+          rightOpen
+
+        ) *
+
+        follow;
+
+    }
+
+
+
+    function updateEnterHover() {
+
+      hoverEnter =
+
+        enterReady() &&
+
+        insideEnter(
+
+          mouseX,
+
+          mouseY
+
+        ) &&
+
+        !fading;
+
+
+
+      cursor(
+
+        hoverEnter
+
+          ? HAND
+
+          : ARROW
+
+      );
+
+    }
+
+
+
+    function enterReady() {
+
+      return (
+
+        introFinished &&
+
+        leftOpen > 0.965 &&
+
+        rightOpen > 0.965
+
+      );
+
+    }
+
+
+
+    function insideEnter(
+
+      x,
+
+      y
+
+    ) {
+
+      return (
+
+        x >=
+
+          enterBox.x - 8 &&
+
+
+
+        x <=
+
+          enterBox.x +
+
+          enterBox.w +
+
+          8 &&
+
+
+
+        y >=
+
+          enterBox.y - 8 &&
+
+
+
+        y <=
+
+          enterBox.y +
+
+          enterBox.h +
+
+          8
+
+      );
+
+    }
+
+
+
+    function drawEnterBox() {
+
+      push();
+
+
+
+      translate(
+
+        enterBox.cx,
+
+        enterBox.cy
+
+      );
+
+
+
+      scale(
+
+        hoverEnter
+
+          ? 1.018
+
+          : 1
+
+      );
+
+
+
+      const alpha =
+
+        hoverEnter
+
+          ? 235
+
+          : 195;
+
+
+
+      rectMode(CENTER);
+
+
+
+      noFill();
+
+
+
+      stroke(
+
+        ENTER_COLOR[0],
+
+        ENTER_COLOR[1],
+
+        ENTER_COLOR[2],
+
+        alpha
+
+      );
+
+
+
+      strokeWeight(1.05);
+
+
+
+      rect(
+
+        0,
+
+        0,
+
+        enterBox.w,
+
+        enterBox.h
+
+      );
+
+
+
+      noStroke();
+
+
+
+      fill(
+
+        ENTER_COLOR[0],
+
+        ENTER_COLOR[1],
+
+        ENTER_COLOR[2],
+
+        alpha
+
+      );
+
+
+
+      textFont(
+
+        'Arial, Helvetica, sans-serif'
+
+      );
+
+
+
+      textSize(13);
+
+
+
+      drawSpacedText(
+
+        'ENTER',
+
+        0,
+
+        1,
+
+        hoverEnter
+
+          ? 4.6
+
+          : 3.9
+
+      );
+
+
+
+      pop();
+
+    }
+
+
+
+    function drawSpacedText(
+
+      value,
+
+      centreX,
+
+      centreY,
+
+      spacing
+
+    ) {
+
+      const widths = [];
+
+
+
+      let totalWidth = 0;
+
+
+
+      for (
+
+        let i = 0;
+
+        i < value.length;
+
+        i += 1
+
+      ) {
+
+        const characterWidth =
+
+          textWidth(
+
+            value[i]
+
+          );
+
+
+
+        widths.push(
+
+          characterWidth
+
+        );
+
+
+
+        totalWidth +=
+
+          characterWidth;
+
+
+
+        if (
+
+          i <
+
+          value.length - 1
+
+        ) {
+
+          totalWidth +=
+
+            spacing;
+
+        }
+
+      }
+
+
+
+      let currentX =
+
+        centreX -
+
+        totalWidth * 0.5;
+
+
+
+      for (
+
+        let i = 0;
+
+        i < value.length;
+
+        i += 1
+
+      ) {
+
+        text(
+
+          value[i],
+
+
+
+          currentX +
+
+            widths[i] * 0.5,
+
+
+
+          centreY
+
+        );
+
+
+
+        currentX +=
+
+          widths[i] +
+
+          spacing;
+
+      }
+
+    }
+
+
+
+    function drawStableEnterMask() {
+
+      maskLayer.clear();
+
+
+
+      maskLayer.noStroke();
+
+
+
+      maskLayer.fill(BG);
+
+
+
+      maskLayer.rect(
+
+        enterBox.x - 25,
+
+        enterBox.y - 18,
+
+        enterBox.w + 50,
+
+        enterBox.h + 36
+
+      );
+
+
+
+      const leftReveal =
+
+        smoothStep(
+
+          0.06,
+
+          0.96,
+
+          leftOpen
+
+        );
+
+
+
+      const rightReveal =
+
+        smoothStep(
+
+          0.06,
+
+          0.96,
+
+          rightOpen
+
+        );
+
+
+
+      const revealLeft =
+
+        lerp(
+
+          enterBox.cx,
+
+          enterBox.x - 9,
+
+          leftReveal
+
+        );
+
+
+
+      const revealRight =
+
+        lerp(
+
+          enterBox.cx,
+
+
+
+          enterBox.x +
+
+            enterBox.w +
+
+            9,
+
+
+
+          rightReveal
+
+        );
+
+
+
+      if (
+
+        revealRight >
+
+        revealLeft
+
+      ) {
+
+        const context =
+
+          maskLayer
+
+            .drawingContext;
+
+
+
+        context.save();
+
+
+
+        context
+
+          .globalCompositeOperation =
+
+          'destination-out';
+
+
+
+        maskLayer.fill(255);
+
+
+
+        maskLayer.rect(
+
+          revealLeft,
+
+          enterBox.y - 9,
+
+
+
+          revealRight -
+
+            revealLeft,
+
+
+
+          enterBox.h + 18,
+
+
+
+          2
+
+        );
+
+
+
+        context.restore();
+
+      }
+
+
+
+      image(
+
+        maskLayer,
+
+        0,
+
+        0
+
+      );
+
+    }
+
+
+
+    function lockCurtainSide(side) {
+
+      if (side < 0) {
+
+        if (leftLocked) {
+
+          return;
+
+        }
+
+
+
+        leftLocked = true;
+
+        leftTarget = 1;
+
+      } else {
+
+        if (rightLocked) {
+
+          return;
+
+        }
+
+
+
+        rightLocked = true;
+
+        rightTarget = 1;
+
+      }
+
+    }
+
+
+
+    function handlePointer(
+
+      x,
+
+      y
+
+    ) {
+
+      if (
+
+        !introFinished ||
+
+        fading ||
+
+        (
+
+          leftLocked &&
+
+          rightLocked
+
+        )
+
+      ) {
+
+        return;
+
+      }
+
+
+
+      const validY =
+
+        y >
+
+          curtain.top +
+
+          curtain.height * 0.12 &&
+
+
+
+        y <
+
+          curtain.bottom +
+
+          35;
+
+
+
+      const centreBand =
+
+        max(
+
+          28,
+
+          curtain.width * 0.065
+
+        );
+
+
+
+      if (!gestureArmed) {
+
+        if (
+
+          validY &&
+
+          abs(
+
+            x -
+
+            curtain.cx
+
+          ) <= centreBand
+
+        ) {
+
+          gestureArmed = true;
+
+        } else {
+
+          return;
+
+        }
+
+      }
+
+
+
+      const maximumTravel =
+
+        curtain.width * 0.48;
+
+
+
+      if (
+
+        x <
+
+        curtain.cx
+
+      ) {
+
+        if (leftLocked) {
+
+          return;
+
+        }
+
+
+
+        const progress =
+
+          constrain(
+
+            (
+
+              curtain.cx -
+
+              x
+
+            ) /
+
+              maximumTravel,
+
+            0,
+
+            1
+
+          );
+
+
+
+        leftTarget =
+
+          max(
+
+            leftTarget,
+
+            progress
+
+          );
+
+
+
+        if (
+
+          progress >= 0.96
+
+        ) {
+
+          lockCurtainSide(-1);
+
+        }
+
+      } else {
+
+        if (rightLocked) {
+
+          return;
+
+        }
+
+
+
+        const progress =
+
+          constrain(
+
+            (
+
+              x -
+
+              curtain.cx
+
+            ) /
+
+              maximumTravel,
+
+            0,
+
+            1
+
+          );
+
+
+
+        rightTarget =
+
+          max(
+
+            rightTarget,
+
+            progress
+
+          );
+
+
+
+        if (
+
+          progress >= 0.96
+
+        ) {
+
+          lockCurtainSide(1);
+
+        }
+
+      }
+
+    }
+
+
+
+    function mouseMoved() {
+
+      handlePointer(
+
+        mouseX,
+
+        mouseY
+
+      );
+
+
+
+      return false;
+
+    }
+
+
+
+    function mouseDragged() {
+
+      handlePointer(
+
+        mouseX,
+
+        mouseY
+
+      );
+
+
+
+      return false;
+
+    }
+
+
+
+    function mousePressed() {
+
+      if (
+
+        enterReady() &&
+
+        insideEnter(
+
+          mouseX,
+
+          mouseY
+
+        )
+
+      ) {
+
+        fading = true;
+
+      } else {
+
+        handlePointer(
+
+          mouseX,
+
+          mouseY
+
+        );
+
+      }
+
+
+
+      return false;
+
+    }
+
+
+
+    function touchStarted() {
+
+      if (
+
+        touches.length > 0
+
+      ) {
+
+        const touch =
+
+          touches[0];
+
+
+
+        if (
+
+          enterReady() &&
+
+          insideEnter(
+
+            touch.x,
+
+            touch.y
+
+          )
+
+        ) {
+
+          fading = true;
+
+        } else {
+
+          handlePointer(
+
+            touch.x,
+
+            touch.y
+
+          );
+
+        }
+
+      }
+
+
+
+      return false;
+
+    }
+
+
+
+    function touchMoved() {
+
+      if (
+
+        touches.length > 0
+
+      ) {
+
+        handlePointer(
+
+          touches[0].x,
+
+          touches[0].y
+
+        );
+
+      }
+
+
+
+      return false;
+
+    }
+
+
+
+    function drawFade() {
+
+      if (!fading) {
+
+        return;
+
+      }
+
+
+
+      fadeAlpha =
+
+        min(
+
+          255,
+
+          fadeAlpha + 8
+
+        );
+
+
+
+      noStroke();
+
+
+
+      fill(
+
+        244,
+
+        240,
+
+        232,
+
+        fadeAlpha
+
+      );
+
+
+
+      rect(
+
+        0,
+
+        0,
+
+        width,
+
+        height
+
+      );
+
+
+
+      if (
+
+        fadeAlpha >= 255 &&
+
+        !navigationStarted
+
+      ) {
+
+        navigationStarted = true;
+
+
+
+        window.location.href =
+
+          ENTER_URL;
+
+      }
+
+    }
+
+
+
+    function keyPressed() {
+
+      if (
+
+        key === 'r' ||
+
+        key === 'R'
+
+      ) {
+
+        leftTarget = 0;
+
+        rightTarget = 0;
+
+
+
+        leftOpen = 0;
+
+        rightOpen = 0;
+
+
+
+        leftLocked = false;
+
+        rightLocked = false;
+
+
+
+        gestureArmed = false;
+
+
+
+        fading = false;
+
+        fadeAlpha = 0;
+
+
+
+        navigationStarted = false;
+
+
+
+        rebuildScene();
+
+      }
+
+    }
+
+
+
+    function windowResized() {
+
+      resizeCanvas(
+
+        windowWidth,
+
+        windowHeight
+
+      );
+
+
+
+      rebuildScene();
+
+    }
+
+
+
+    class CurtainStrand {
+
+      constructor(
+
+        index,
+
+        anchorX,
+
+        side,
+
+        rank
+
+      ) {
+
+        this.index =
+
+          index;
+
+
+
+        this.anchorX =
+
+          anchorX;
+
+
+
+        this.side =
+
+          side;
+
+
+
+        this.rank =
+
+          rank;
+
+
+
+        this.tieRatio =
+
+          constrain(
+
+            0.61 +
+
+              random(
+
+                -0.009,
+
+                0.009
+
+              ),
+
+            0.598,
+
+            0.622
+
+          );
+
+
+
+        this.windPhase =
+
+          random(TWO_PI);
+
+
+
+        this.windPhase2 =
+
+          random(TWO_PI);
+
+
+
+        this.windSpeed =
+
+          random(
+
+            0.00078,
+
+            0.00108
+
+          );
+
+
+
+        this.windAmplitude =
+
+          random(
+
+            0.92,
+
+            1.18
+
+          );
+
+          /*
+
+  关闭状态下的流动参数。
+
+
+
+  noise 让相邻线条拥有接近的运动，
+
+  random 保留少量单根差异。
+
+*/
+
+this.closedFlowPhase =
+
+  map(
+
+    noise(
+
+      index * 0.083
+
+    ),
+
+    0,
+
+    1,
+
+    -2.6,
+
+    2.6
+
+  ) +
+
+  random(
+
+    -0.42,
+
+    0.42
+
+  );
+
+
+
+this.closedFlowPhase2 =
+
+  map(
+
+    noise(
+
+      50 +
+
+      index * 0.061
+
+    ),
+
+    0,
+
+    1,
+
+    -1.9,
+
+    1.9
+
+  ) +
+
+  random(
+
+    -0.35,
+
+    0.35
+
+  );
+
+
+
+this.closedFlowAmplitude =
+
+  constrain(
+
+    map(
+
+      noise(
+
+        100 +
+
+        index * 0.093
+
+      ),
+
+      0,
+
+      1,
+
+      0.72,
+
+      1.42
+
+    ) +
+
+    random(
+
+      -0.08,
+
+      0.08
+
+    ),
+
+    0.64,
+
+    1.46
+
+  );
+
+
+
+/*
+
+  尾端跟随中段时的延迟。
+
+*/
+
+this.closedTailLag =
+
+  map(
+
+    noise(
+
+      200 +
+
+      index * 0.071
+
+    ),
+
+    0,
+
+    1,
+
+    0.42,
+
+    1.02
+
+  );
+
+
+
+/*
+
+  每根线固定的横向差异。
+
+*/
+
+this.closedFlowBias =
+
+  map(
+
+    noise(
+
+      300 +
+
+      index * 0.055
+
+    ),
+
+    0,
+
+    1,
+
+    -26,
+
+    26
+
+  ) +
+
+  random(
+
+    -10,
+
+    10
+
+  );
+
+
+
+/*
+
+  控制不同线条的垂直缩短程度。
+
+*/
+
+this.closedLiftScale =
+
+  map(
+
+    noise(
+
+      400 +
+
+      index * 0.087
+
+    ),
+
+    0,
+
+    1,
+
+    0.88,
+
+    1.18
+
+  );
+
+
+
+        this.bundleOffsetX =
+
+          randomGaussian() *
+
+          1.8;
+
+
+
+        this.bundleOffsetY =
+
+          randomGaussian() *
+
+          1.2;
+
+
+
+        this.tailBias =
+
+          randomGaussian() *
+
+          2.2;
+
+
+
+        this.lineAlpha =
+
+          random(
+
+            88,
+
+            142
+
+          );
+
+
+
+        this.lineWeight =
+
+          random(
+
+            0.48,
+
+            0.74
+
+          );
+
+
+
+        this.revealDelay =
+
+          random(
+
+            60,
+
+            760
+
+          ) +
+
+          noise(
+
+            index * 0.17
+
+          ) *
+
+          260;
+
+
+
+        this.revealDuration =
+
+          random(
+
+            900,
+
+            1450
+
+          );
+
+
+
+        this.openValue = 0;
+
+
+
+        this.points = [];
+
+
+
+        for (
+
+          let i = 0;
+
+          i < NODE_COUNT;
+
+          i += 1
+
+        ) {
+
+          const t =
+
+            i /
+
+            (NODE_COUNT - 1);
+
+
+
+          const y =
+
+            curtain.top +
+
+            t *
+
+            curtain.height;
+
+
+
+          this.points.push({
+
+            x:
+
+              anchorX,
+
+
+
+            y:
+
+              y,
+
+
+
+            vx:
+
+              0,
+
+
+
+            vy:
+
+              0
+
+          });
+
+        }
+
+      }
+
+
+
+      sideProgress() {
+
+        return (
+
+          this.side < 0
+
+            ? leftOpen
+
+            : rightOpen
+
+        );
+
+      }
+
+
+
+      sideLocked() {
+
+        return (
+
+          this.side < 0
+
+            ? leftLocked
+
+            : rightLocked
+
+        );
+
+      }
+
+
+
+      activationTarget() {
+
+        const progress =
+
+          this.sideProgress();
+
+
+
+        const threshold =
+
+          this.rank * 0.8;
+
+
+
+        return smoothStep(
+
+          threshold,
+
+
+
+          min(
+
+            1.02,
+
+            threshold + 0.22
+
+          ),
+
+
+
+          progress
+
+        );
+
+      }
+
+
+
+      sharedWind(now) {
+
+        return (
+
+          sin(
+
+            now * 0.00076
+
+          ) *
+
+            0.66 +
+
+
+
+          sin(
+
+            now * 0.00031 +
+
+            1.35
+
+          ) *
+
+            0.24 +
+
+
+
+          map(
+
+            noise(
+
+              now * 0.000055
+
+            ),
+
+            0,
+
+            1,
+
+            -1,
+
+            1
+
+          ) *
+
+            0.1
+
+        );
+
+      }
+
+
+
+      privateWind(now) {
+
+        return (
+
+          sin(
+
+            now *
+
+            this.windSpeed +
+
+            this.windPhase
+
+          ) *
+
+            0.72 +
+
+
+
+          sin(
+
+            now *
+
+            this.windSpeed *
+
+            0.51 +
+
+            this.windPhase2
+
+          ) *
+
+            0.28
+
+        );
+
+      }
+
+
+
+      windSignal(now) {
+
+        return (
+
+          this.sharedWind(now) *
+
+            0.78 +
+
+
+
+          this.privateWind(now) *
+
+            0.22
+
+        ) *
+
+        this.windAmplitude;
+
+      }
+
+
+
+      closedPoint(
+
+  t,
+
+  now
+
+) {
+
+  /*
+
+    整片帘幕共享的慢速风向。
+
+
+
+    共享风只占一部分，
+
+    防止所有线再次同步倾斜。
+
+  */
+
+  const sharedFlow =
+
+    sin(
+
+      now * 0.00042
+
+    ) *
+
+      0.62 +
+
+
+
+    sin(
+
+      now * 0.00017 +
+
+      1.3
+
+    ) *
+
+      0.38;
+
+
+
+  /*
+
+    相邻线条形成松散的小组。
+
+
+
+    closedFlowPhase 来自连续 noise，
+
+    所以相邻线之间不会突然跳变。
+
+  */
+
+  const groupedFlow =
+
+    sin(
+
+      now * 0.00053 +
+
+      this.closedFlowPhase
+
+    ) *
+
+      0.68 +
+
+
+
+    sin(
+
+      now * 0.00022 +
+
+      this.closedFlowPhase2
+
+    ) *
+
+      0.32;
+
+
+
+  /*
+
+    尾端使用延迟后的同一组运动。
+
+
+
+    中段先改变方向，
+
+    尾端稍晚跟随。
+
+  */
+
+  const delayedTailFlow =
+
+    sin(
+
+      now * 0.00053 +
+
+      this.closedFlowPhase -
+
+      this.closedTailLag
+
+    ) *
+
+      0.68 +
+
+
+
+    sin(
+
+      now * 0.00022 +
+
+      this.closedFlowPhase2 -
+
+      this.closedTailLag *
+
+        0.46
+
+    ) *
+
+      0.32;
+
+
+
+  /*
+
+    靠近顶部的偏移保持克制。
+
+  */
+
+  const rootSway =
+
+    sharedFlow *
+
+      12 +
+
+
+
+    groupedFlow *
+
+      22 *
+
+      this.closedFlowAmplitude;
+
+
+
+  /*
+
+    中段获得明显的分组流动。
+
+
+
+    相邻线会靠近、分开并产生交叉。
+
+  */
+
+  const rawMiddleSway =
+
+    sharedFlow *
+
+      42 +
+
+
+
+    groupedFlow *
+
+      118 *
+
+      this.closedFlowAmplitude +
+
+
+
+    this.closedFlowBias *
+
+      0.55;
+
+
+
+  /*
+
+    限制中段最大位置，
+
+    防止线条离开中央区域。
+
+  */
+
+  const middleSway =
+
+    constrain(
+
+      rawMiddleSway,
+
+      -170,
+
+      170
+
+    );
+
+
+
+  /*
+
+    尾端幅度更大，
+
+    同时比中段存在明显延迟。
+
+  */
+
+  const rawTipSway =
+
+    sharedFlow *
+
+      58 +
+
+
+
+    delayedTailFlow *
+
+      168 *
+
+      this.closedFlowAmplitude +
+
+
+
+    this.closedFlowBias;
+
+
+
+  /*
+
+    第一层尾端限制。
+
+
+
+    控制整个帘幕的最大横向范围。
+
+  */
+
+  const boundedTipSway =
+
+    constrain(
+
+      rawTipSway,
+
+      -220,
+
+      220
+
+    );
+
+
+
+  /*
+
+    第二层尾端限制。
+
+
+
+    尾端不能与中段距离过大，
+
+    因此不会反向卷成钩子。
+
+  */
+
+  const tipSway =
+
+    constrain(
+
+      boundedTipSway,
+
+      middleSway - 108,
+
+      middleSway + 108
+
+    );
+
+
+
+  /*
+
+    根据横向运动计算垂直投影缩短。
+
+
+
+    弯曲越明显，
+
+    尾端停留的位置越高。
+
+  */
+
+  const horizontalEnergy =
+
+    constrain(
+
+      abs(
+
+        tipSway
+
+      ) /
+
+        190,
+
+      0,
+
+      1
+
+    );
+
+
+
+  const tailBendEnergy =
+
+    constrain(
+
+      abs(
+
+        tipSway -
+
+        middleSway
+
+      ) /
+
+        108,
+
+      0,
+
+      1
+
+    );
+
+
+
+  const middleBendEnergy =
+
+    constrain(
+
+      abs(
+
+        middleSway -
+
+        rootSway
+
+      ) /
+
+        120,
+
+      0,
+
+      1
+
+    );
+
+
+
+  const liftRatio =
+
+    constrain(
+
+      (
+
+        0.035 +
+
+
+
+        horizontalEnergy *
+
+          0.17 +
+
+
+
+        tailBendEnergy *
+
+          0.16 +
+
+
+
+        middleBendEnergy *
+
+          0.055
+
+      ) *
+
+      this.closedLiftScale,
+
+      0.025,
+
+      0.38
+
+    );
+
+
+
+  /*
+
+    极小的垂直呼吸，
+
+    防止尾端像固定在水平线上。
+
+  */
+
+  const verticalBreath =
+
+    sin(
+
+      now * 0.00031 +
+
+      this.closedFlowPhase2
+
+    ) *
+
+      2.4;
+
+
+
+  /*
+
+    一条线只使用一个三次曲线。
+
+
+
+    p0 到 p3 的 y 坐标始终向下增加，
+
+    因此不会产生环形或局部卷曲。
+
+  */
+
+  const p0 = {
+
+    x:
+
+      this.anchorX,
+
+
+
+    y:
+
+      curtain.top
+
+  };
+
+
+
+  /*
+
+    顶部以下很快开始产生轻微倾斜。
+
+  */
+
+  const p1 = {
+
+    x:
+
+      this.anchorX +
+
+
+
+      rootSway *
+
+        0.45 +
+
+
+
+      middleSway *
+
+        0.16,
+
+
+
+    y:
+
+      curtain.top +
+
+      curtain.height *
+
+        0.18
+
+  };
+
+
+
+  /*
+
+    中段形成主要交叉和线束分层。
+
+  */
+
+  const p2 = {
+
+    x:
+
+      this.anchorX +
+
+      middleSway,
+
+
+
+    y:
+
+      curtain.top +
+
+
+
+      curtain.height *
+
+      (
+
+        0.56 -
+
+        liftRatio *
+
+          0.12
+
+      )
+
+  };
+
+
+
+  /*
+
+    尾端使用最大幅度和延迟。
+
+
+
+    尾端高度根据弯曲程度自动改变。
+
+  */
+
+  const p3 = {
+
+    x:
+
+      this.anchorX +
+
+      tipSway,
+
+
+
+    y:
+
+      curtain.top +
+
+
+
+      curtain.height *
+
+      (
+
+        1 -
+
+        liftRatio
+
+      ) +
+
+
+
+      verticalBreath
+
+  };
+
+
+
+  return cubicPoint(
+
+    p0,
+
+    p1,
+
+    p2,
+
+    p3,
+
+    t
+
+  );
+
+}
+
+
+
+      tiePoint(now) {
+
+        const locked =
+
+          this.sideLocked();
+
+
+
+        const baseX =
+
+          this.side < 0
+
+            ? curtain.leftTieX
+
+            : curtain.rightTieX;
+
+
+
+        const wind =
+
+          this.windSignal(now);
+
+
+
+        return {
+
+          x:
+
+            baseX +
+
+
+
+            this.bundleOffsetX +
+
+
+
+            wind *
+
+            (
+
+              locked
+
+                ? 1.8
+
+                : 3.2
+
+            ),
+
+
+
+          y:
+
+            curtain.tieY +
+
+
+
+            this.bundleOffsetY +
+
+
+
+            sin(
+
+              now * 0.00048 +
+
+              this.windPhase2
+
+            ) *
+
+            (
+
+              locked
+
+                ? 0.45
+
+                : 1.4
+
+            )
+
+        };
+
+      }
+
+
+
+      gatheredPoint(
+
+        t,
+
+        now
+
+      ) {
+
+        const tie =
+
+          this.tiePoint(now);
+
+
+
+        const tieT =
+
+          this.tieRatio;
+
+
+
+        /*
+
+          束点上方。
+
+        */
+
+        if (
+
+          t <= tieT
+
+        ) {
+
+          const q =
+
+            t /
+
+            tieT;
+
+
+
+          /*
+
+            收束后上半部分的整体风摆。
+
+
+
+            28 是主要摆动幅度。
+
+            10 是第二层缓慢偏移。
+
+            3.5 是每根线的细微差异。
+
+          */
+
+          const upperSway =
+
+            sin(
+
+              now * 0.00068 +
+
+              this.side * 0.28
+
+            ) *
+
+              46 +
+
+
+
+            sin(
+
+              now * 0.00029 +
+
+              1.15
+
+            ) *
+
+              16 +
+
+
+
+            sin(
+
+              now *
+
+              this.windSpeed +
+
+              this.windPhase
+
+            ) *
+
+              3.8;
+
+
+
+          const p0 = {
+
+            x:
+
+              this.anchorX,
+
+
+
+            y:
+
+              curtain.top
+
+          };
+
+
+
+          const p1 = {
+
+            x:
+
+              this.anchorX +
+
+              upperSway * 0.24,
+
+
+
+            y:
+
+              curtain.top +
+
+              curtain.height * 0.2
+
+          };
+
+
+
+          const p2 = {
+
+            x:
+
+              lerp(
+
+                this.anchorX,
+
+                tie.x,
+
+                0.82
+
+              ) +
+
+              upperSway * 0.78,
+
+
+
+            y:
+
+              tie.y -
+
+              curtain.height * 0.16
+
+          };
+
+
+
+          const p3 = {
+
+            x:
+
+              tie.x +
+
+              upperSway * 0.08,
+
+
+
+            y:
+
+              tie.y
+
+          };
+
+
+
+          return cubicPoint(
+
+            p0,
+
+            p1,
+
+            p2,
+
+            p3,
+
+            q
+
+          );
+
+        }
+
+
+
+        /*
+
+  束点下方。
+
+
+
+  束点附近先移动，
+
+  中段稍晚跟随，
+
+  尾端最后跟随。
+
+
+
+  每根线保持完整的大弧形，
+
+  同时让中下段产生自然的分层和交叉。
+
+*/
+
+const q =
+
+  (
+
+    t -
+
+    tieT
+
+  ) /
+
+  (
+
+    1 -
+
+    tieT
+
+  );
+
+
+
+/*
+
+  整片尾线共享的主要风向。
+
+
+
+  mainPhase 控制主要左右摆动。
+
+  slowPhase 增加一层更慢的呼吸感。
+
+*/
+
+const mainPhase =
+
+  now * 0.00058 +
+
+  this.side * 0.34;
+
+
+
+const slowPhase =
+
+  now * 0.00023 +
+
+  1.15;
+
+
+
+/*
+
+  相邻线条之间的缓慢差异。
+
+
+
+  差异来自线条编号，
+
+  运动过程中不会突然随机变化，
+
+  所以画面保持连续。
+
+*/
+
+const groupDifference =
+
+  sin(
+
+    this.index * 0.21 +
+
+    this.windPhase * 0.16
+
+  ) *
+
+    0.65 +
+
+
+
+  sin(
+
+    this.index * 0.073 +
+
+    1.7
+
+  ) *
+
+    0.35;
+
+
+
+/*
+
+  每根线的摆动幅度略有不同。
+
+
+
+  变化范围较小，
+
+  避免单根线独自卷曲。
+
+*/
+
+const motionStrength =
+
+  0.88 +
+
+  groupDifference * 0.14;
+
+
+
+/*
+
+  风摆接近两侧最大位置时，
+
+  尾线间距会稍微扩大。
+
+
+
+  经过中间位置时，
+
+  间距会自然缩小。
+
+*/
+
+const spreadPulse =
+
+  abs(
+
+    sin(
+
+      mainPhase -
+
+      0.35
+
+    )
+
+  );
+
+
+
+/*
+
+  下摆基础展开宽度增加。
+
+
+
+  风摆较大时，
+
+  下摆还会产生少量呼吸式扩张。
+
+*/
+
+const tailSpread =
+
+  curtain.width *
+
+  (
+
+    0.34 +
+
+    spreadPulse * 0.035
+
+  );
+
+
+
+/*
+
+  保留相邻线条原有的细微层次。
+
+*/
+
+const strandSeparation =
+
+  this.side *
+
+  (
+
+    sin(
+
+      this.index * 0.39 +
+
+      0.7
+
+    ) *
+
+      5.2 +
+
+
+
+    sin(
+
+      this.index * 0.15 +
+
+      1.8
+
+    ) *
+
+      3
+
+  ) *
+
+  (
+
+    0.45 +
+
+    this.rank * 0.55
+
+  );
+
+
+
+/*
+
+  中央侧线减少向内伸出的距离，
+
+  外侧线增加向外展开的距离。
+
+
+
+  下摆会更像窗帘扇面，
+
+  不会在中央堆积过多。
+
+*/
+
+const fanPosition =
+
+  this.rank -
+
+  0.42;
+
+
+
+const tailEndX =
+
+  tie.x +
+
+
+
+  this.side *
+
+  fanPosition *
+
+  tailSpread +
+
+
+
+  this.tailBias +
+
+  strandSeparation;
+
+
+
+/*
+
+  束点附近的运动。
+
+
+
+  这里保持幅度相对克制，
+
+  让束点仍然具有重量和稳定感。
+
+*/
+
+const rootSway =
+
+  sin(
+
+    mainPhase
+
+  ) *
+
+    48 +
+
+
+
+  sin(
+
+    slowPhase
+
+  ) *
+
+    18;
+
+
+
+/*
+
+  中段比束点晚一点。
+
+
+
+  groupDifference 会让不同线束的延迟
+
+  出现很小的区别。
+
+*/
+
+const middlePhase =
+
+  mainPhase -
+
+  0.36 -
+
+  groupDifference * 0.07;
+
+
+
+const rawMiddleSway =
+
+  sin(
+
+    middlePhase
+
+  ) *
+
+    68 *
+
+    motionStrength +
+
+
+
+  sin(
+
+    slowPhase -
+
+    0.16
+
+  ) *
+
+    22 +
+
+
+
+  sin(
+
+    now *
+
+    this.windSpeed +
+
+    this.windPhase
+
+  ) *
+
+    4;
+
+
+
+/*
+
+  尾端延迟更加明显。
+
+
+
+  0.72 是主要延迟量。
+
+  这个幅度肉眼可以看见，
+
+  同时仍然保持连续运动。
+
+*/
+
+const tipPhase =
+
+  mainPhase -
+
+  0.72 -
+
+  groupDifference * 0.12;
+
+
+
+const rawTipSway =
+
+  sin(
+
+    tipPhase
+
+  ) *
+
+    92 *
+
+    motionStrength +
+
+
+
+  sin(
+
+    slowPhase -
+
+    0.33
+
+  ) *
+
+    27 +
+
+
+
+  sin(
+
+    now *
+
+    this.windSpeed *
+
+    0.7 +
+
+    this.windPhase2
+
+  ) *
+
+    6;
+
+
+
+/*
+
+  中段保留束点运动的一部分。
+
+
+
+  这样运动会沿着整根线逐渐传递，
+
+  不会在中间突然折弯。
+
+*/
+
+const blendedMiddleSway =
+
+  lerp(
+
+    rootSway,
+
+    rawMiddleSway,
+
+    0.72
+
+  );
+
+
+
+/*
+
+  限制中段与束点之间的最大差距。
+
+
+
+  这是防止尾线出现反向钩子
+
+  和过度卷曲的第一层保护。
+
+*/
+
+const middleSway =
+
+  constrain(
+
+    blendedMiddleSway,
+
+    rootSway - 42,
+
+    rootSway + 42
+
+  );
+
+
+
+/*
+
+  尾端保留中段运动的一部分。
+
+
+
+  尾端延迟清楚可见，
+
+  运动方向仍然和中段保持关联。
+
+*/
+
+const blendedTipSway =
+
+  lerp(
+
+    middleSway,
+
+    rawTipSway,
+
+    0.78
+
+  );
+
+
+
+/*
+
+  限制尾端与中段之间的最大距离。
+
+
+
+  尾端可以明显拖曳，
+
+  但不会向反方向甩成弯钩。
+
+*/
+
+const tipSway =
+
+  constrain(
+
+    blendedTipSway,
+
+    middleSway - 56,
+
+    middleSway + 56
+
+  );
+
+
+
+/*
+
+  尾端产生少量上下沉浮。
+
+
+
+  数值远小于水平摆动，
+
+  用来表现线条重量。
+
+*/
+
+const tailVerticalFollow =
+
+  sin(
+
+    tipPhase +
+
+    HALF_PI
+
+  ) *
+
+    4.2 +
+
+
+
+  sin(
+
+    slowPhase +
+
+    HALF_PI
+
+  ) *
+
+    1.6;
+
+
+
+const tailLength =
+
+  curtain.height *
+
+  (
+
+    1 -
+
+    tieT
+
+  ) *
+
+  0.985;
+
+
+
+const p0 =
+
+  tie;
+
+
+
+/*
+
+  靠近束点的位置移动较少。
+
+*/
+
+/*
+
+  束点下方只保留很短的紧收区域。
+
+
+
+  到下摆长度的 8% 时，
+
+  已经开始向外展开。
+
+*/
+
+const p1 = {
+
+  x:
+
+    lerp(
+
+      tie.x,
+
+      tailEndX,
+
+      0.2
+
+    ) +
+
+    rootSway * 0.07,
+
+
+
+  y:
+
+    tie.y +
+
+    tailLength * 0.08
+
+};
+
+
+
+/*
+
+  到下摆中部之前，
+
+  已经完成大部分扇形展开。
+
+
+
+  中段仍然保留原有的延迟摆动。
+
+*/
+
+const p2 = {
+
+  x:
+
+    lerp(
+
+      tie.x,
+
+      tailEndX,
+
+      0.78
+
+    ) +
+
+    middleSway * 0.62,
+
+
+
+  y:
+
+    tie.y +
+
+    tailLength * 0.47 +
+
+    tailVerticalFollow * 0.18
+
+};
+
+
+
+/*
+
+  最末端保持原来的物理延迟和摆动。
+
+*/
+
+const p3 = {
+
+  x:
+
+    tailEndX +
+
+    tipSway,
+
+
+
+  y:
+
+    tie.y +
+
+    tailLength +
+
+    tailVerticalFollow
+
+};
+
+
+
+return cubicPoint(
+
+  p0,
+
+  p1,
+
+  p2,
+
+  p3,
+
+  q
+
+);
+
+      }
+
+
+
+      targetPoint(
+
+        t,
+
+        now
+
+      ) {
+
+        const closed =
+
+          this.closedPoint(
+
+            t,
+
+            now
+
+          );
+
+
+
+        const gathered =
+
+          this.gatheredPoint(
+
+            t,
+
+            now
+
+          );
+
+
+
+        /*
+
+          束点附近先响应。
+
+
+
+          距离束点越远，
+
+          跟随稍微越晚。
+
+        */
+
+        const tieDistance =
+
+          abs(
+
+            t -
+
+            this.tieRatio
+
+          );
+
+
+
+        const maximumDistance =
+
+          max(
+
+            this.tieRatio,
+
+            1 -
+
+            this.tieRatio
+
+          );
+
+
+
+        const delay =
+
+          0.17 *
+
+          constrain(
+
+            tieDistance /
+
+              maximumDistance,
+
+            0,
+
+            1
+
+          );
+
+
+
+        const localOpen =
+
+          smoothStep(
+
+            delay,
+
+            1,
+
+            this.openValue
+
+          );
+
+
+
+        return {
+
+          x:
+
+            lerp(
+
+              closed.x,
+
+              gathered.x,
+
+              localOpen
+
+            ),
+
+
+
+          y:
+
+            lerp(
+
+              closed.y,
+
+              gathered.y,
+
+              localOpen
+
+            )
+
+        };
+
+      }
+
+
+
+      update(
+
+        now,
+
+        dt
+
+      ) {
+
+        const targetOpen =
+
+          this.activationTarget();
+
+
+
+        /*
+
+          数值越接近 1，
+
+          单根线收束越柔和。
+
+        */
+
+        const openFollow =
+
+          1 -
+
+          pow(
+
+            lerp(
+
+              0.905,
+
+              0.935,
+
+              this.rank
+
+            ),
+
+            dt
+
+          );
+
+
+
+        this.openValue +=
+
+          (
+
+            targetOpen -
+
+            this.openValue
+
+          ) *
+
+          openFollow;
+
+
+
+        const locked =
+
+          this.sideLocked();
+
+
+
+        for (
+
+          let i = 0;
+
+          i < NODE_COUNT;
+
+          i += 1
+
+        ) {
+
+          const t =
+
+            i /
+
+            (NODE_COUNT - 1);
+
+
+
+          const point =
+
+            this.points[i];
+
+
+
+          const target =
+
+            this.targetPoint(
+
+              t,
+
+              now
+
+            );
+
+
+
+          if (
+
+            i === 0
+
+          ) {
+
+            point.x =
+
+              this.anchorX;
+
+
+
+            point.y =
+
+              curtain.top;
+
+
+
+            point.vx = 0;
+
+            point.vy = 0;
+
+
+
+            continue;
+
+          }
+
+
+
+          /*
+
+            stiffness 越小，
+
+            收束越柔和。
+
+
+
+            damping 控制运动稳定速度。
+
+          */
+
+          const stiffness =
+
+            locked
+
+              ? 0.026
+
+              : 0.022;
+
+
+
+          const damping =
+
+            locked
+
+              ? 0.89
+
+              : 0.9;
+
+
+
+          point.vx +=
+
+            (
+
+              target.x -
+
+              point.x
+
+            ) *
+
+            stiffness *
+
+            dt;
+
+
+
+          point.vy +=
+
+            (
+
+              target.y -
+
+              point.y
+
+            ) *
+
+            stiffness *
+
+            dt;
+
+
+
+          point.vx *=
+
+            pow(
+
+              damping,
+
+              dt
+
+            );
+
+
+
+          point.vy *=
+
+            pow(
+
+              damping,
+
+              dt
+
+            );
+
+
+
+          point.x +=
+
+            point.vx *
+
+            dt;
+
+
+
+          point.y +=
+
+            point.vy *
+
+            dt;
+
+        }
+
+
+
+        this.smoothCurve(dt);
+
+      }
+
+
+
+      smoothCurve(dt) {
+
+        /*
+
+          只清除局部小弯曲。
+
+
+
+          整根线的大弧度会保留。
+
+        */
+
+        for (
+
+          let pass = 0;
+
+          pass < 2;
+
+          pass += 1
+
+        ) {
+
+          for (
+
+            let i = 1;
+
+            i <
+
+              NODE_COUNT - 1;
+
+            i += 1
+
+          ) {
+
+            const previous =
+
+              this.points[
+
+                i - 1
+
+              ];
+
+
+
+            const point =
+
+              this.points[i];
+
+
+
+            const next =
+
+              this.points[
+
+                i + 1
+
+              ];
+
+
+
+            const averageX =
+
+              (
+
+                previous.x +
+
+                next.x
+
+              ) *
+
+              0.5;
+
+
+
+            const averageY =
+
+              (
+
+                previous.y +
+
+                next.y
+
+              ) *
+
+              0.5;
+
+
+
+            point.x +=
+
+              (
+
+                averageX -
+
+                point.x
+
+              ) *
+
+              0.16 *
+
+              dt;
+
+
+
+            point.y +=
+
+              (
+
+                averageY -
+
+                point.y
+
+              ) *
+
+              0.08 *
+
+              dt;
+
+          }
+
+        }
+
+
+
+        this.points[0].x =
+
+          this.anchorX;
+
+
+
+        this.points[0].y =
+
+          curtain.top;
+
+      }
+
+
+
+      revealAmount(now) {
+
+        return smoothStep(
+
+          this.revealDelay,
+
+
+
+          this.revealDelay +
+
+            this.revealDuration,
+
+
+
+          now
+
+        );
+
+      }
+
+
+
+      draw(now) {
+
+        const reveal =
+
+          this.revealAmount(now);
+
+
+
+        if (
+
+          reveal <= 0.001
+
+        ) {
+
+          return;
+
+        }
+
+
+
+        const finalPosition =
+
+          reveal *
+
+          (
+
+            NODE_COUNT - 1
+
+          );
+
+
+
+        const completeIndex =
+
+          floor(
+
+            finalPosition
+
+          );
+
+
+
+        const partial =
+
+          finalPosition -
+
+          completeIndex;
+
+
+
+        const visiblePoints =
+
+          [];
+
+
+
+        for (
+
+          let i = 0;
+
+
+
+          i <=
+
+          min(
+
+            completeIndex,
+
+            NODE_COUNT - 1
+
+          );
+
+
+
+          i += 1
+
+        ) {
+
+          visiblePoints.push(
+
+            this.points[i]
+
+          );
+
+        }
+
+
+
+        if (
+
+          completeIndex <
+
+            NODE_COUNT - 1 &&
+
+
+
+          partial > 0
+
+        ) {
+
+          const first =
+
+            this.points[
+
+              completeIndex
+
+            ];
+
+
+
+          const second =
+
+            this.points[
+
+              completeIndex + 1
+
+            ];
+
+
+
+          visiblePoints.push({
+
+            x:
+
+              lerp(
+
+                first.x,
+
+                second.x,
+
+                partial
+
+              ),
+
+
+
+            y:
+
+              lerp(
+
+                first.y,
+
+                second.y,
+
+                partial
+
+              )
+
+          });
+
+        }
+
+
+
+        if (
+
+          visiblePoints.length <
+
+          2
+
+        ) {
+
+          return;
+
+        }
+
+
+
+        stroke(
+
+          LINE_COLOR[0],
+
+          LINE_COLOR[1],
+
+          LINE_COLOR[2],
+
+
+
+          this.lineAlpha +
+
+          this.openValue * 8
+
+        );
+
+
+
+        strokeWeight(
+
+          this.lineWeight
+
+        );
+
+
+
+        noFill();
+
+
+
+        beginShape();
+
+
+
+        const first =
+
+          visiblePoints[0];
+
+
+
+        curveVertex(
+
+          first.x,
+
+          first.y
+
+        );
+
+
+
+        curveVertex(
+
+          first.x,
+
+          first.y
+
+        );
+
+
+
+        for (
+
+          const point of
+
+          visiblePoints
+
+        ) {
+
+          curveVertex(
+
+            point.x,
+
+            point.y
+
+          );
+
+        }
+
+
+
+        const last =
+
+          visiblePoints[
+
+            visiblePoints.length -
+
+            1
+
+          ];
+
+
+
+        curveVertex(
+
+          last.x,
+
+          last.y
+
+        );
+
+
+
+        curveVertex(
+
+          last.x,
+
+          last.y
+
+        );
+
+
+
+        endShape();
+
+      }
+
+    }
+
+
+
+    function cubicPoint(
+
+      p0,
+
+      p1,
+
+      p2,
+
+      p3,
+
+      t
+
+    ) {
+
+      const inverse =
+
+        1 - t;
+
+
+
+      const a =
+
+        inverse *
+
+        inverse *
+
+        inverse;
+
+
+
+      const b =
+
+        3 *
+
+        inverse *
+
+        inverse *
+
+        t;
+
+
+
+      const c =
+
+        3 *
+
+        inverse *
+
+        t *
+
+        t;
+
+
+
+      const d =
+
+        t *
+
+        t *
+
+        t;
+
+
+
+      return {
+
+        x:
+
+          a * p0.x +
+
+          b * p1.x +
+
+          c * p2.x +
+
+          d * p3.x,
+
+
+
+        y:
+
+          a * p0.y +
+
+          b * p1.y +
+
+          c * p2.y +
+
+          d * p3.y
+
+      };
+
+    }
+
+
+
+    function smoothStep(
+
+      start,
+
+      end,
+
+      value
+
+    ) {
+
+      if (
+
+        start === end
+
+      ) {
+
+        return value < start
+
+          ? 0
+
+          : 1;
+
+      }
+
+
+
+      const progress =
+
+        constrain(
+
+          (
+
+            value -
+
+            start
+
+          ) /
+
+            (
+
+              end -
+
+              start
+
+            ),
+
+          0,
+
+          1
+
+        );
+
+
+
+      return (
+
+        progress *
+
+        progress *
+
+        (
+
+          3 -
+
+          2 *
+
+          progress
+
+        )
+
+      );
+
+    }
+
+  </script>
+<div
+  class="opening-name"
+  aria-label="Yao Siyuan"
+>
+  <span class="opening-name-cn">姚思远</span>
+  <span class="opening-name-en">SIYUAN YAO</span>
+</div>
+</body>
+
+</html>

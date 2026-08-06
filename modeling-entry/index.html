@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>3D Works | Siyuan Yao</title>
+
+  <link
+    rel="stylesheet"
+    href="./style.css"
+  >
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"
+  ></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
+
+<link
+  href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=DM+Serif+Display&display=swap"
+  rel="stylesheet"
+>
+</head>
+
+<body>
+  <header class="page-header">
+    <a
+      class="back-link"
+      href="../portfolio.html"
+    >
+      BACK
+    </a>
+
+    <div class="page-heading">
+      <p class="owner-name">
+        SIYUAN YAO
+      </p>
+
+      <h1 class="page-title">
+        3D WORKS
+      </h1>
+    </div>
+  </header>
+
+  <main class="entry-grid">
+    <!-- 柳树入口 -->
+    <button
+      class="entry-card"
+      id="modelingEntry"
+      type="button"
+      aria-label="Open 3D Modeling projects"
+    >
+      <div
+        class="art-stage"
+        id="willow-stage"
+        aria-hidden="true"
+      ></div>
+
+      <div class="entry-caption">
+  <span class="entry-name">
+    3D MODELING
+  </span>
+</div>
+    </button>
+
+    <!-- UE5 气球入口 -->
+    <button
+      class="entry-card"
+      id="ue5Entry"
+      type="button"
+      aria-label="Open UE5 Level Prototype projects"
+    >
+      <div
+        class="art-stage"
+        id="balloons-stage"
+        aria-hidden="true"
+      ></div>
+
+      <div class="entry-caption">
+  <span class="entry-name">
+    UE5 LEVEL PROTOTYPE
+  </span>
+</div>
+    </button>
+  </main>
+
+  <script src="./willow.js"></script>
+  <script src="./balloons.js"></script>
+  <script src="./main.js"></script>
+  <script src="./gallery-links.js"></script>
+  <script src="../page-transition.js"></script>
+</body>
+</html>

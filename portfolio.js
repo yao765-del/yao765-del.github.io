@@ -367,3 +367,57 @@ document.addEventListener(
     );
   }
 );
+/*
+  GAME DESIGN
+*/
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    const elements = [
+      ...document.querySelectorAll(
+        "span, p, div, a, button"
+      )
+    ];
+
+    const title =
+      elements.find(
+        element =>
+          element.textContent
+            .replace(/\s+/g, " ")
+            .trim() ===
+          "GAME DESIGN"
+      );
+
+    if (!title) {
+      return;
+    }
+
+    const target =
+      title.closest(
+        [
+          "a",
+          "button",
+          ".work-button",
+          ".work-item",
+          ".navigation-item",
+          ".portfolio-item",
+          "li"
+        ].join(", ")
+      ) ||
+      title.parentElement;
+
+    target.style.cursor =
+      "pointer";
+
+    target.addEventListener(
+      "click",
+      event => {
+        event.preventDefault();
+
+        window.location.href =
+          "./game-design/index.html";
+      },
+      true
+    );
+  }
+);

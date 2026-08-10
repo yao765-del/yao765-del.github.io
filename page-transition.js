@@ -469,3 +469,16 @@
   revealModelingPage();
   connectModelingButton();
 })();
+
+/*
+  修复浏览器返回键恢复缓存页面后，
+  页面停留在离场动画状态的问题。
+*/
+window.addEventListener(
+  "pageshow",
+  event => {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  }
+);

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Game Design | Siyuan Yao
+  </title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="./game-design.css"
+  >
+</head>
+
+<body>
+
+  <header class="page-header">
+    <a
+      class="header-name"
+      href="../portfolio.html"
+    >
+      SIYUAN YAO
+    </a>
+
+    <div class="header-right">
+      <span>
+        GAME DESIGN
+      </span>
+
+      <a
+        href="../portfolio.html"
+      >
+        BACK
+      </a>
+    </div>
+  </header>
+
+  <p
+    class="year year--top"
+    aria-hidden="true"
+  >
+    2024
+  </p>
+
+  <p
+    class="year year--bottom"
+    aria-hidden="true"
+  >
+    2026
+  </p>
+
+  <main class="book-page">
+
+    <div class="book-heading">
+      <span class="book-index">
+        02
+      </span>
+
+      <div>
+        <p class="book-label">
+          GAME DESIGN
+        </p>
+
+        <h1>
+          DESIGN DOCUMENT
+        </h1>
+
+        <p class="book-description">
+          Game concept, narrative design, worldbuilding and development documentation.
+        </p>
+      </div>
+    </div>
+
+    <section class="book-stage">
+
+      <button
+        class="book-arrow"
+        id="prevPage"
+        type="button"
+        aria-label="Previous pages"
+      >
+        ←
+      </button>
+
+      <div
+        class="book"
+        id="book"
+        tabindex="0"
+      >
+
+        <div
+          class="book-sheet book-sheet--left"
+          id="leftSheet"
+        >
+          <img
+            id="leftPage"
+            src=""
+            alt=""
+          >
+
+          <span
+            class="page-number"
+            id="leftNumber"
+          ></span>
+        </div>
+
+        <div
+          class="book-sheet book-sheet--right"
+          id="rightSheet"
+        >
+          <img
+            id="rightPage"
+            src=""
+            alt=""
+          >
+
+          <span
+            class="page-number"
+            id="rightNumber"
+          ></span>
+        </div>
+
+      </div>
+
+      <button
+        class="book-arrow"
+        id="nextPage"
+        type="button"
+        aria-label="Next pages"
+      >
+        →
+      </button>
+
+    </section>
+
+    <div class="book-footer">
+      <span id="pageCounter">
+        LOADING
+      </span>
+    </div>
+
+  </main>
+
+  <script src="./game-design.js"></script>
+</body>
+</html>

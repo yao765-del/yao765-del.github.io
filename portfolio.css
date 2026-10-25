@@ -62,9 +62,10 @@ body {
   opacity: 0;
 
   object-fit: cover;
-  object-position: 35% 46%;
+object-position: center;
 
-  pointer-events: none;
+
+pointer-events: none;
   user-select: none;
 
   will-change:

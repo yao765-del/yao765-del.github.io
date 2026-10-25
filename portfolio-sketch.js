@@ -283,15 +283,13 @@ function calculatePortraitBox() {
   const isMobile = width < 760;
 
   if (isMobile) {
-    const portraitRatio = 0.68;
-
     const portraitWidth = Math.min(
-      width * 0.64,
-      280
+      width * 0.82,
+      340
     );
 
     const portraitHeight =
-      portraitWidth / portraitRatio;
+      portraitWidth * (220 / 340);
 
     return {
       left:
@@ -310,30 +308,15 @@ function calculatePortraitBox() {
     };
   }
 
-  const portraitRatio = 0.66;
-
-  const portraitWidth = Math.min(
-    Math.max(
-      width * 0.14,
-      190
-    ),
-    230
-  );
-
-  const portraitHeight =
-    portraitWidth / portraitRatio;
+  const portraitWidth = 340;
+  const portraitHeight = 220;
 
   return {
     left: 34,
     top: 112,
 
-    width: Math.round(
-      portraitWidth
-    ),
-
-    height: Math.round(
-      portraitHeight
-    )
+    width: portraitWidth,
+    height: portraitHeight
   };
 }
 
